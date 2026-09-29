@@ -891,9 +891,11 @@
 .activity-icon-lunch{background-image:url('/icons/meal.svg?v=phosphor-fill-3')}
 .activity-icon-coffee{background-image:url('/icons/coffee-chat.svg?v=phosphor-fill-3')}
 .activity-icon-activity{background-image:url('/icons/casual-plan.svg?v=phosphor-fill-3')}
-.conversation-first .starter-prompts>button{max-width:100%;gap:var(--space-10);padding:var(--space-12) var(--space-16)}
-.starter-prompts>button>span{min-width:0;text-align:left;line-height:20px}
-.starter-prompts>button>svg{flex:none;width:14px;height:14px}
+.conversation-first .starter-prompts{gap:var(--space-10)}
+.conversation-first .starter-prompts>button{width:fit-content;max-width:100%;min-height:44px;gap:var(--space-8);padding:var(--space-10) var(--space-14);border-radius:var(--radius-20);font-size:var(--type-12)!important;box-shadow:0 4px 14px #4d82960a}
+.conversation-first .starter-prompts>button .activity-icon{width:16px;height:16px}
+.starter-prompts>button>span{min-width:0;text-align:left;line-height:18px}
+.starter-prompts>button>svg{flex:none;width:12px;height:12px;margin-left:var(--space-2)}
 .explore-entry-symbol .activity-icon{width:16px;height:16px}
 .conversation-first .explore-entry-symbol{width:20px;height:20px;flex:none;background:none;border:0;box-shadow:none}
 
