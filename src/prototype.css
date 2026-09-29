@@ -408,6 +408,7 @@
 .coffee-match-summary>strong{display:block;font-size:var(--type-14);font-weight:500;line-height:1.5}
 .coffee-match-summary-meta{display:flex;flex-wrap:wrap;gap:var(--space-6);margin-top:var(--space-10)}
 .coffee-match-summary-meta span{background:#edf7fb;border-radius:var(--radius-1000);padding:var(--space-6) var(--space-10);font-size:var(--type-10);color:#648493}
+.coffee-review{max-width:94%}.coffee-review-topic{display:flex;align-items:center;gap:var(--space-10);margin:var(--space-18) 0 var(--space-4)}.coffee-review-topic .activity-icon{width:22px;height:22px}.coffee-review-topic>div{display:grid;gap:var(--space-2)}.coffee-review-topic span{font-size:var(--type-10);color:#718a97}.coffee-review-topic strong{font-size:var(--type-14);font-weight:500;line-height:1.4;color:#234754}.coffee-review .lunch-plan-summary{margin-top:var(--space-16)}
 .coffee-preference-editor{display:flex;flex-direction:column;gap:var(--space-22);padding-bottom:var(--space-24)}
 .coffee-preference-editor>label,.coffee-preference-editor legend{font-size:var(--type-12);font-weight:500;color:#244754}
 .coffee-preference-editor input{margin-top:var(--space-8)}
