@@ -663,6 +663,17 @@
 .explore-meal-option p{font-size:var(--type-10);color:#6c8794;margin:0}
 .explore-meal-option button{display:grid;place-items:center;flex:none;width:36px;height:36px;border:0;border-radius:50%;background:#183641;color:#fff}
 .explore-meal-option button svg{width:16px}
+.explore-meal-post .explore-kind{color:#3f829d}
+.explore-own-post{margin-left:auto;color:#5e7e8d;font:500 var(--type-10) Poppins,sans-serif;padding:var(--space-8) var(--space-12);border-radius:var(--radius-1000);background:#edf7fb}
+.meal-post-editor{display:grid;gap:var(--space-18)}
+.meal-post-editor .moment-author{margin-bottom:var(--space-2)}
+.meal-post-editor fieldset{margin:0}
+.meal-post-editor label{display:grid;gap:var(--space-8);color:#294653;font:500 var(--type-12)/1.4 Poppins,sans-serif}
+.meal-post-editor input,.meal-post-editor textarea{width:100%;box-sizing:border-box;border:1px solid #dcebf2;border-radius:var(--radius-16);background:#f7fbfd;color:#203947;padding:var(--space-12) var(--space-14);font:400 var(--type-14)/1.5 Poppins,sans-serif;outline:none;margin:0;resize:none}
+.meal-post-editor input{min-height:46px}
+.meal-post-editor textarea{min-height:92px}
+.meal-post-editor input:focus,.meal-post-editor textarea:focus{border-color:#62bee4;background:#fff}
+.meal-post-error{color:#a55858;font-size:var(--type-10);font-weight:400}
 .explore-types button{font-size:var(--type-10)}
 /* Four independent Explore category pills. */
 .explore-types{background:transparent;border:0;border-radius:0;padding:0;gap:var(--space-8);margin-bottom:var(--space-16)}
