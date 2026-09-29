@@ -145,7 +145,7 @@ When any text-entry control loses focus, dismiss the simulated keyboard. If the 
 
 ### Coffee chat continuation (2026-09-29)
 - Coffee threads share Meal’s collapsible Invite → Confirm → Meet → Reflect card. Accepting unchanged details confirms directly; a proposed time needs the recipient’s agreement. Collapsed Meet and Reflect retain their primary actions; Invite has no extra CTA.
-- Guided Coffee chat pauses after topic, purpose, and format are collected for a compact confirmation card before showing people. The card summarizes the topic, purpose, 20-minute default, and format/campus, has an edit control, and uses “Find coffee chats” as the explicit transition into matching cards.
+- Guided Coffee chat pauses after topic, purpose, and format are collected for a compact confirmation card before showing people. Use the short heading “Ready to connect?”, summarize topic, purpose, 20-minute default, and format/campus without a category icon or explanatory footer, and match Meal’s small pencil control. “Find coffee chats” is the explicit transition into matching cards. The edit sheet uses a full-width topic field, compact chips, a shorter height, and Save changes returns to the confirmation card.
 - Confirmed in-person chats use “I’m here”, online chats add/join a shared meeting link; “Finish chat” opens Reflect. Both card sizes use “Write feedback” and a private feedback bottom sheet.
 - Conversation ideas are optional, topic-aware local suggestions in a bottom sheet: Start, Go deeper, New angle. Explore retains the selected question as context; Use question fills an editable composer draft, never sends automatically. This prototype uses curated suggestions, not live AI replies.
 
