@@ -450,6 +450,13 @@
 .coffee-profile-formats{display:flex;align-items:center;gap:var(--space-6);font-size:var(--type-12);color:#628393;padding:var(--space-16) 0;border-top:1px solid #edf3f7}
 .coffee-profile-formats svg{width:15px;height:15px}
 .coffee-invite-page>.coffee-person-top{margin-bottom:var(--space-22)}
+.join-plan-preview{padding-bottom:var(--space-16);border-bottom:1px solid #e5f0f5}
+.join-plan-preview>span{font:500 var(--type-10)/1.4 Poppins,sans-serif;letter-spacing:.6px;color:#5388a1}
+.join-plan-preview h2{margin:var(--space-8) 0;font-size:var(--type-18);line-height:1.4;color:#183b4a}
+.join-plan-preview p{margin:0 0 var(--space-14);font-size:var(--type-12);line-height:1.65;color:#5d7c8a}
+.join-plan-preview>div{display:grid;gap:var(--space-8)}
+.join-plan-preview>div>span{display:flex;align-items:center;gap:var(--space-8);font-size:var(--type-12);color:#426b7d}
+.join-plan-preview svg{width:14px;height:14px;flex:none}
 .coffee-form{display:flex;flex-direction:column;gap:var(--space-12)}
 .coffee-form label{display:block;font-size:var(--type-12);font-weight:500;color:#315467;line-height:1.65}
 .coffee-form label:not(:first-child){margin-top:var(--space-6)}
