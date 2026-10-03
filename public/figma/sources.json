@@ -1,0 +1,15 @@
+{
+  "fileKey": "O7CniMMb53BzcMZzmh5bd5",
+  "syncedOn": "2026-10-03",
+  "avatar-empty.svg": {"nodeId":"1115:3699", "type":"Figma vector export"},
+  "portrait.png": {"source":"output/onboarding-avatar/fictional-portrait.png", "type":"Previously approved generated fictional portrait"},
+  "cartoon.png": {"source":"output/onboarding-avatar/cartoon-avatar.png", "type":"Previously approved generated cartoon mock"},
+  "video-person.png": {"nodeId":"980:9720", "type":"Figma image fill"},
+  "video-self.png": {"nodeId":"980:9720", "type":"Figma image fill"},
+  "phone.svg": {"nodeId":"980:9720", "type":"Figma vector export"},
+  "microphone.svg": {"nodeId":"980:9720", "type":"Figma vector export"},
+  "video.svg": {"nodeId":"980:9720", "type":"Figma vector export"},
+  "notebook.svg": {"nodeId":"980:9720", "type":"Figma vector export"},
+  "campus-map.svg": {"nodeId":"1060:23251", "type":"Figma vector export"},
+  "demo-qr.svg": {"nodeId":"1052:8417", "type":"Figma editable sample QR vector"}
+}
