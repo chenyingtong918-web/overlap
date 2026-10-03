@@ -5,7 +5,7 @@ async function scenario(page:Page,name:string){await page.getByText('Demo scenar
 async function assertNoHorizontalOverflow(page:Page){expect(await page.locator('.content').evaluate(el=>el.scrollWidth<=el.clientWidth+1)).toBe(true);}
 
 test('avatar generation remains optional and leads into all four onboarding steps',async({page})=>{
- await demo(page);await scenario(page,'Avatar onboarding');await expect(page.getByLabel('Step 1 of 4')).toBeVisible();
+ await demo(page);await scenario(page,'Avatar onboarding');await expect(page.getByLabel('Step 1 of 4')).toBeVisible();await expect(page.locator('.onboarding-title')).toHaveCSS('font-size','24px');
  await page.getByRole('button',{name:'Take photo',exact:true}).click();await page.getByRole('button',{name:'Create my AI avatar',exact:true}).click();
  await expect(page.getByRole('button',{name:'Please wait'})).toBeDisabled();await page.getByRole('button',{name:'Use this avatar',exact:true}).click();
  await expect(page.getByLabel('Step 2 of 4')).toBeVisible();await expect(page.getByRole('button',{name:'Add a profile photo'})).toHaveCount(0);
