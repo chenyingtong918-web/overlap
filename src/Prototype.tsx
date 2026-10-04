@@ -105,6 +105,16 @@ function AuthScreen({onComplete}:{onComplete:(signup:boolean,name?:string)=>void
 
 export default function Prototype(){
  const [authOpen,setAuthOpen]=useState(true);
+ const [authEntry,setAuthEntry]=useState(0),[demoEntry,setDemoEntry]=useState('login');
+ const [processNavOpen,setProcessNavOpen]=useState(false);
+ const processNavRef=useRef<HTMLElement>(null);
+ useEffect(()=>{
+  if(!processNavOpen)return;
+  const dismiss=(event:PointerEvent)=>{if(!processNavRef.current?.contains(event.target as Node))setProcessNavOpen(false);};
+  const escape=(event:KeyboardEvent)=>{if(event.key==='Escape'){setProcessNavOpen(false);processNavRef.current?.querySelector<HTMLButtonElement>('.demo-process-toggle')?.focus();}};
+  document.addEventListener('pointerdown',dismiss);document.addEventListener('keydown',escape);
+  return()=>{document.removeEventListener('pointerdown',dismiss);document.removeEventListener('keydown',escape);};
+ },[processNavOpen]);
  const keyboard=useKeyboard(),{bottomInset,isKeyboardVisible}=useKeyboardInsets();
  const {screenRef}=useScreenPortal(),{device}=useMobileDevice();
  const [view,setView]=useState<View>('home'),[returnView,setReturnView]=useState<View>('home'),[input,setInput]=useState(''),[chatDraft,setChatDraft]=useState(''),[query,setQuery]=useState(''),[kind,setKind]=useState<Kind|null>(null),[stage,setStage]=useState('review');
@@ -223,9 +233,9 @@ export default function Prototype(){
  function goBack(){if(view==='inbox'&&communityRoute){setCommunityRoute('');return}if(view==='coffee-prep'&&coffeePrepStep>0&&coffeePrepStep<4){setCoffeePrepStep(coffeePrepStep-1);return}if(view==='coffee-prep'||view==='coffee-call'){go('thread');return}if(['discoveries','vouchers','privacy','public-profile','edit-profile'].includes(view)){go('profile');return}if(view==='casual-post'){go(casualPostOrigin);return}if(view==='casual-photo-review'){go('casual-camera');return}if(view==='casual-camera'){setMapPanel(true);go('casual-map');return}if(view==='casual-spot'){go('thread');return}if(view==='casual-ideas'||view==='casual-map'){go('thread');return}if(view==='direct-message'){go('join-invite');return}if(view==='coffee-person'||view==='coffee-invite'){go(coffeeEditId?'thread':coffeeOrigin);return}if(view==='join-invite'){go(joinOrigin);return}if(view==='saved'){go('explore');return}go(detailHistory.current.pop()||'home')}
  function switchTab(tab:'chat'|'explore'){keyboard.hide();if(tab==='chat'&&(view==='home'||view==='assistant'))return;if(tab==='explore'&&view==='explore')return;if(view==='home'||view==='assistant')setChatDraft(input);setInput(tab==='chat'?chatDraft:'');setView(tab==='chat'?(query?'assistant':'home'):'explore')}
  function showSheet(s:string){keyboard.hide();if(s==='preferences'){setDraft({...prefs});setCustomPrefTime(!(meal==='Dinner'?['17:30','18:00','18:30','19:00']:['11:30','12:00','12:30','13:00']).includes(prefs.time))}setSheet(s)}
- function start(text:string,forced?:Kind){
+ function start(text:string,forced?:Kind,fresh=false){
   if(!text.trim())return;keyboard.hide();if(lunchTimer.current)clearTimeout(lunchTimer.current);
-  if(view==='assistant'&&query)setHistory(a=>[...a,{query,summary:kind==='lunch'?`${prefs.campus} · ${prefs.time} · ${prefs.size} people · ${prefs.diet}`:kind==='coffee'?'Explore relevant people, then write your invitation.':'Choose how much commitment your post asks for.'}]);else setHistory([]);
+  if(!fresh&&view==='assistant'&&query)setHistory(a=>[...a,{query,summary:kind==='lunch'?`${prefs.campus} · ${prefs.time} · ${prefs.size} people · ${prefs.diet}`:kind==='coffee'?'Explore relevant people, then write your invitation.':'Choose how much commitment your post asks for.'}]);else setHistory([]);
   setQuery(text);setInput('');setChatDraft('');setView('assistant');setStage('review');
   const k:Kind|null=forced??(/lunch|meal|dinner|午饭|午餐|约饭|吃饭/i.test(text)?'lunch':/coffee|career|research|product|咖啡|转岗|聊聊/i.test(text)?'coffee':/walk|game|activity|散步|游戏|活动|一起/i.test(text)?'activity':view==='assistant'?kind:null);setKind(k);
   const np={...prefs},tm=text.match(/\b([01]?\d|2[0-3]):([0-5]\d)\b/);
@@ -439,9 +449,36 @@ export default function Prototype(){
  <div className="explore-type-tabs" role="tablist" aria-label="Explore categories"><Carousel className="explore-type-rail" contentClassName="explore-types">{['All','Meal draws','Coffee chats','Casual plans'].map(t=><button key={t} role="tab" aria-selected={filter===t} onClick={()=>{keyboard.hide();setFilter(t)}}>{t}</button>)}</Carousel></div>
  </div>}
 
- if(authOpen)return <AuthScreen onComplete={(signup,newName)=>{setAuthOpen(false);setSheet('');setToast('');if(signup){if(newName)setName(newName);setStep(1);go('onboarding')}else go('home')}}/>;
+ function openDemoProcess(entry:'login'|'onboarding'|Kind,source:'chat'|'explore'='chat'){
+  keyboard.hide();
+  if(lunchTimer.current){clearTimeout(lunchTimer.current);lunchTimer.current=null;}
+  if(prepTimer.current){clearTimeout(prepTimer.current);prepTimer.current=null;}
+  setPrepBusy(false);setSheet('');setToast('');setInput('');setChatDraft('');setQuery('');setHistory([]);setKind(null);setStage('review');
+  detailHistory.current=[];setReturnView('home');setSearchOpen(false);setExploreSearch('');setExploreScope('Campus A');setExploreFormat('Any format');
+  setDemoEntry(entry==='login'||entry==='onboarding'?entry:`${entry}-${source}`);
+  setProcessNavOpen(false);
+  if(entry==='login'){setAuthEntry(n=>n+1);setAuthOpen(true);setView('home');}
+  else {
+   setAuthOpen(false);
+   if(entry==='onboarding'){setStep(0);setAvatarStage('empty');setAvatarPhoto('');setOnboardMenu('');setEditingCard(false);setView('onboarding');}
+   else if(source==='explore'){setFilter(entry==='lunch'?'Meal draws':entry==='coffee'?'Coffee chats':'Casual plans');setView('explore');}
+   else start(entry==='lunch'?'I’d like to find someone for lunch.':entry==='coffee'?'I’d love a coffee chat.':'A little company after work?',entry,true);
+  }
+  requestAnimationFrame(()=>appRef.current?.querySelector('.mobile-scroll')?.scrollTo({top:0,behavior:'instant'}));
+ }
+ const processNavigation=createPortal(<aside ref={processNavRef} className="demo-process-nav" aria-label="Demo process navigation">
+  <button className="demo-process-toggle" aria-expanded={processNavOpen} aria-controls="demo-process-options" onClick={()=>setProcessNavOpen(v=>!v)}><span>Demo flows</span><ChevronRightIcon className={processNavOpen?'is-open':''}/></button>
+  {processNavOpen&&<nav id="demo-process-options" aria-label="Process shortcuts">
+   <button className="demo-process-link" aria-pressed={demoEntry==='login'} onClick={()=>openDemoProcess('login')}>Login/Sign up<ArrowRightIcon/></button>
+   <button className="demo-process-link" aria-pressed={demoEntry==='onboarding'} onClick={()=>openDemoProcess('onboarding')}>Onboarding<ArrowRightIcon/></button>
+   {([{kind:'lunch',label:'Meal draw'},{kind:'coffee',label:'Coffee chat'},{kind:'activity',label:'Casual plan'}] as const).map(flow=><div className="demo-process-group" key={flow.kind}><span>{flow.label}</span><div>{(['chat','explore'] as const).map(source=><button key={source} aria-label={`${flow.label} — ${source==='chat'?'Chat':'Explore'}`} aria-pressed={demoEntry===`${flow.kind}-${source}`} onClick={()=>openDemoProcess(flow.kind,source)}>{source==='chat'?'Chat':'Explore'}</button>)}</div></div>)}
+  </nav>}
+ </aside>,document.body);
+
+ if(authOpen)return <>{processNavigation}<AuthScreen key={authEntry} onComplete={(signup,newName)=>{setAuthOpen(false);setSheet('');setToast('');if(signup){if(newName)setName(newName);setStep(0);go('onboarding')}else go('home')}}/></>;
  return <div ref={appRef} className={'overlap-app conversation-first '+(view==='home'?'is-chat-home ':'')+(view==='assistant'||view==='coffee-prep'?'assistant-screen ':'')+(view==='coffee-prep'?'coffee-prep-screen ':'')+(view==='assistant'&&kind==='lunch'?'lunch-guided ':'')+(view==='assistant'&&kind==='coffee'?'coffee-guided ':'')+(view==='assistant'&&kind==='activity'?'casual-guided ':'')+(view==='explore'?'explore-screen ':'')+(view==='onboarding'?'onboarding-screen ':'')+(isPrimary?'primary-screen':'detail-screen')}>
 
+ {processNavigation}
  {createPortal(<details className="demo-scenarios" onClick={e=>{if((e.target as HTMLElement).closest('button'))e.currentTarget.open=false}}><summary>Demo scenarios</summary><p>Local states only · no messages, calls or AI requests are sent.</p><button onClick={()=>{setStep(0);setAvatarStage('empty');go('onboarding')}}>Avatar onboarding</button><button onClick={()=>{const id=Date.now();setPlans(ps=>[...ps,{id,kind:'lunch',title:'Lunch with Noah Yu',date:new Date().getDate(),time:'12:00',place:'Common Table · Building A',format:'In person',people:'Noah Yu',status:'Pending',meal:{food:'Noodles',participants:['Noah Yu'],accepted:[]},messages:[{who:'You',text:'Hi Noah! We matched for lunch today. I’m thinking noodles around 12:00. Would you like to join me at Common Table?'}]}]);setPlanId(id);go('thread')}}>Meal invitation</button><button onClick={()=>{const id=Date.now();setPlans(ps=>[...ps,{id,kind:'coffee',title:'Moving into product',date:new Date().getDate(),time:'15:00',place:'Online',format:'Online',people:'Zoe Lin',status:'Confirmed',coffee:{dateISO:coffeeDate(),duration:'20 min',link:'',note:'',flexible:false},messages:[]}]);setPlanId(id);go('thread')}}>Confirmed coffee chat</button>{[false,true].map(group=><button key={String(group)} onClick={()=>{const id=Date.now();setPlans(ps=>[...ps,{id,momentId:2,kind:'activity',title:'A slow photo walk',date:new Date().getDate(),time:'18:15',place:'Campus A south gate',format:'In person',people:group?'Alex & Emma':'Alex Lin',status:'Confirmed',casual:{group},messages:[{who:'You',text:'I’d love a slow walk before heading home.'},{who:'Alex',text:'See you at 18:15!'}]}]);setPlanId(id);go('thread')}}>{group?'Group casual plan':'Confirmed casual plan'}</button>)}{view==='thread'&&current.kind==='lunch'&&<>{current.status==='Pending'&&<><button onClick={()=>previewMealReply('accept')}>Recipient accepts</button><button onClick={()=>previewMealReply('propose')}>Recipient suggests time</button><button onClick={()=>previewMealReply('decline')}>Recipient declines</button><button onClick={()=>previewMealReply('expire')}>Invitation expires</button></>}{current.status==='Confirmed'&&<button onClick={previewAfterMeal}>Meal ends</button>}{current.status==='Discussing'&&<button onClick={confirmMealDetails}>Recipient agrees to details</button>}</>}{stage==='scheduled'&&<button onClick={draw}>Scheduled reveal</button>}</details>,document.body)}
 
  {view!=='onboarding'&&isPrimary&&<header className="top-bar">
