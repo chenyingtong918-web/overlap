@@ -1,0 +1,11 @@
+{
+  "fileKey": "O7CniMMb53BzcMZzmh5bd5",
+  "welcomeNode": "1208:3765",
+  "assets": {
+    "overlap-wordmark.svg": { "node": "1209:5415", "width": 111.92, "height": 29.9031 },
+    "welcome-art.svg": { "node": "I1211:6090;18016:72810", "width": 390, "height": 300 },
+    "welcome-mask.svg": { "node": "1211:6090", "width": 390, "height": 300 },
+    "password-eye.svg": { "node": "935:591", "width": 18, "height": 18 }
+  },
+  "note": "Original Figma SVG exports. Status bar and home indicator use the protected device runtime."
+}

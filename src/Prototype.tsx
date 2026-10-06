@@ -119,36 +119,47 @@ function CoffeeDeck({cards,itemLabel="person",ariaLabel="Coffee chat recommendat
 }
 function AuthScreen({onComplete}:{onComplete:(signup:boolean,name?:string)=>void}){
  const keyboard=useKeyboard();
- const [mode,setMode]=useState<'login'|'signup'|'reset'>('login');
+ const [mode,setMode]=useState<'welcome'|'login'|'signup'|'reset'>('welcome');
  const [email,setEmail]=useState(''),[password,setPassword]=useState(''),[fullName,setFullName]=useState('');
  const [showPassword,setShowPassword]=useState(false),[error,setError]=useState(''),[busy,setBusy]=useState(false),[resetPreview,setResetPreview]=useState(false);
  const timer=useRef<ReturnType<typeof setTimeout>|null>(null);
  useEffect(()=>()=>{if(timer.current)clearTimeout(timer.current)},[]);
- function changeMode(next:typeof mode){keyboard.hide();setMode(next);setError('');setPassword('');setShowPassword(false);setResetPreview(false)}
+ function changeMode(next:typeof mode){keyboard.hide();if(timer.current){clearTimeout(timer.current);timer.current=null;}setBusy(false);setMode(next);setError('');setPassword('');setShowPassword(false);setResetPreview(false)}
  function submit(e:React.FormEvent){e.preventDefault();if(busy)return;
   if(mode==='signup'&&!fullName.trim()){setError('What should we call you?');return}
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())){setError('Enter a valid email address.');return}
+  const validEmail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+  const validPhone=/^\+?[\d ()-]+$/.test(email.trim())&&/^\d{7,15}$/.test(email.replace(/\D/g,''));
+  if(!validEmail&&(mode==='reset'||!validPhone)){setError(mode==='reset'?'Enter a valid email address.':'Enter a valid phone number or email address.');return}
   if(mode!=='reset'&&password.length<8){setError('Use a password with at least 8 characters.');return}
   keyboard.hide();setError('');setBusy(true);
   timer.current=setTimeout(()=>{setBusy(false);setPassword('');if(mode==='reset')setResetPreview(true);else onComplete(mode==='signup',fullName.trim());},650);
  }
  const blur=(e:React.FocusEvent<HTMLInputElement>)=>{if(!(e.relatedTarget instanceof HTMLElement&&e.relatedTarget.matches('input,textarea')))keyboard.hide()};
- return <div className="overlap-app conversation-first auth-screen">
-  <MobileScroll className="auth-scroll"><main className="auth-content">
-   <div className="auth-brand">overlap<span>.</span></div>
+ const demoShortcut=createPortal(<aside className="auth-demo-shortcut" aria-label="Account demo controls"><button onClick={()=>{keyboard.hide();onComplete(false)}} disabled={busy}>Explore the demo<ArrowRightIcon/></button><small>Local preview · no account is created.<br/>Use sample details, not your real password.</small></aside>,document.body);
+ return <div className={'overlap-app conversation-first auth-screen'+(mode==='welcome'?' auth-welcome':'')}>
+  {demoShortcut}
+  {mode==='welcome'?<>
+   <div className="auth-welcome-art" aria-hidden="true"><img src="/auth/welcome-art.svg" alt=""/></div>
+   <MobileScroll className="auth-welcome-scroll"><main className="auth-welcome-content">
+    <h1 className="auth-welcome-title" aria-label="Welcome to overlap."><span>Welcome to</span><img src="/auth/overlap-wordmark.svg" alt="overlap."/></h1>
+    <p className="auth-welcome-description">A lunch, a conversation, a little adventure.<br/>Find your people, at your pace.</p>
+    <div className="auth-welcome-actions"><button className="auth-primary" onClick={()=>changeMode('login')}>Continue with phone or email</button><button className="auth-secondary" onClick={()=>changeMode('signup')}>Sign up</button></div>
+    <p className="auth-welcome-terms">By continuing, you agree to our Terms of Service<br/>and acknowledge our Privacy Policy.</p>
+   </main></MobileScroll>
+  </>:<MobileScroll key={mode} className="auth-scroll"><main className="auth-content">
+   <div className="auth-brand-row"><div className="auth-brand">overlap<span>.</span></div><button className="auth-home-back" aria-label="Back to welcome" onClick={()=>changeMode('welcome')} disabled={busy}><ArrowLeftIcon/></button></div>
    {mode==='reset'?<button className="auth-back" onClick={()=>changeMode('login')}><ArrowLeftIcon/>Back to log in</button>:<div className="auth-tabs" role="tablist" aria-label="Account access"><button role="tab" aria-selected={mode==='login'} onClick={()=>changeMode('login')} disabled={busy}>Log in</button><button role="tab" aria-selected={mode==='signup'} onClick={()=>changeMode('signup')} disabled={busy}>Sign up</button></div>}
    <div className="auth-heading"><h1>{mode==='login'?'Good to see you.':mode==='signup'?'A little more connected.':resetPreview?'A fresh start.':'Forgot your password?'}</h1><p>{mode==='login'?'Pick up where your last hello left off.':mode==='signup'?'Meet the people behind the job titles.':resetPreview?'This is a preview of the password recovery step. No email has been sent.':'We’ll help you find your way back.'}</p></div>
    {resetPreview?<div className="auth-reset-result"><span className="auth-success"><CheckIcon/></span><p>A reset link would be sent to <strong>{email}</strong>.</p><button className="auth-primary" onClick={()=>changeMode('login')}>Back to log in<ArrowRightIcon/></button></div>:<form className="auth-form" onSubmit={submit} noValidate>
     {mode==='signup'&&<label htmlFor="auth-name">Your name<KeyboardInput id="auth-name" autoComplete="name" placeholder="How you’d like to be known" value={fullName} onChange={e=>{setFullName(e.target.value);setError('')}} onBlur={blur} disabled={busy}/></label>}
-    <label htmlFor="auth-email">Email<KeyboardInput id="auth-email" type="email" autoComplete="email" autoCapitalize="none" spellCheck={false} placeholder="you@company.com" value={email} onChange={e=>{setEmail(e.target.value);setError('')}} onBlur={blur} disabled={busy}/></label>
-    {mode!=='reset'&&<label htmlFor="auth-password">Password<div className="auth-password"><KeyboardInput id="auth-password" type={showPassword?'text':'password'} autoComplete={mode==='signup'?'new-password':'current-password'} placeholder={mode==='signup'?'At least 8 characters':'Your password'} value={password} onChange={e=>{setPassword(e.target.value);setError('')}} onBlur={blur} disabled={busy}/><button type="button" aria-label={showPassword?'Hide password':'Show password'} aria-pressed={showPassword} onPointerDown={e=>e.preventDefault()} onClick={()=>setShowPassword(v=>!v)}>{showPassword?<EyeClosedIcon/>:<EyeOpenIcon/>}</button></div></label>}
+    <label htmlFor="auth-email">{mode==='reset'?'Email':'Phone or email'}<KeyboardInput id="auth-email" type={mode==='reset'?'email':'text'} autoComplete={mode==='reset'?'email':'username'} autoCapitalize="none" spellCheck={false} placeholder={mode==='reset'?'you@company.com':'Phone number or email address'} value={email} onChange={e=>{setEmail(e.target.value);setError('')}} onBlur={blur} disabled={busy}/></label>
+    {mode!=='reset'&&<label htmlFor="auth-password">Password<div className="auth-password"><KeyboardInput id="auth-password" type={showPassword?'text':'password'} autoComplete={mode==='signup'?'new-password':'current-password'} placeholder={mode==='signup'?'At least 8 characters':'Your password'} value={password} onChange={e=>{setPassword(e.target.value);setError('')}} onBlur={blur} disabled={busy}/><button type="button" aria-label={showPassword?'Hide password':'Show password'} aria-pressed={showPassword} onPointerDown={e=>e.preventDefault()} onClick={()=>setShowPassword(v=>!v)}>{showPassword?<EyeClosedIcon/>:<img src="/auth/password-eye.svg" alt=""/>}</button></div></label>}
     {mode==='login'&&<button type="button" className="auth-forgot" onClick={()=>changeMode('reset')} disabled={busy}>Forgot password?</button>}
     {error&&<p className="auth-error" role="alert">{error}</p>}
-    <button className="auth-primary" disabled={busy} aria-busy={busy}>{busy?'One moment…':mode==='signup'?'Create account':mode==='reset'?'Preview reset link':'Log in'}{!busy&&<ArrowRightIcon/>}</button>
+    <button className="auth-primary" disabled={busy} aria-busy={busy}>{busy?'One moment…':mode==='signup'?'Create account':mode==='reset'?'Preview reset link':'Log in'}</button>
     {mode==='signup'&&<p className="auth-next">Next, make a little space for yourself.</p>}
    </form>}
-   <div className="auth-footer"><button onClick={()=>{keyboard.hide();onComplete(false)}} disabled={busy}>Explore the demo<ArrowRightIcon/></button><p>Interactive preview · no account is created.<br/>Use sample details, not your real password.</p></div>
-  </main></MobileScroll>
+  </main></MobileScroll>}
  </div>
 }
 

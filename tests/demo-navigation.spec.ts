@@ -25,13 +25,13 @@ test('all process shortcuts open their first screen, including from login', asyn
  }
  await page.getByRole('button',{name:'Demo flows',exact:true}).click();
  await nav.getByRole('button',{name:'Login/Sign up',exact:true}).click();
- await expect(page.getByRole('heading',{name:'Good to see you.'})).toBeVisible();
+ await expect(page.getByRole('heading',{name:'Welcome to overlap.'})).toBeVisible();
  await page.waitForTimeout(3200);
- await expect(page.getByRole('heading',{name:'Good to see you.'})).toBeVisible();
- await page.getByRole('tab',{name:'Sign up',exact:true}).click();
+ await expect(page.getByRole('heading',{name:'Welcome to overlap.'})).toBeVisible();
+ await page.getByRole('button',{name:'Sign up',exact:true}).click();
  await page.getByRole('button',{name:'Demo flows',exact:true}).click();
  await nav.getByRole('button',{name:'Login/Sign up',exact:true}).click();
- await expect(page.getByRole('tab',{name:'Log in',exact:true})).toHaveAttribute('aria-selected','true');
+ await expect(page.getByRole('heading',{name:'Welcome to overlap.'})).toBeVisible();
  await page.screenshot({path:'test-results/demo-flow-navigation.png'});
  await page.getByRole('button',{name:'Demo flows',exact:true}).click();
  await page.keyboard.press('Escape');

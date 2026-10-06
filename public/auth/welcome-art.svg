@@ -1,0 +1,24 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="390" height="300" viewBox="0 0 390 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Frame 2147223763" clip-path="url(#clip0_0_13)">
+<mask id="mask0_0_13" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="390" height="348">
+<rect id="Rectangle 2131354345" width="390" height="348" fill="url(#paint0_linear_0_13)"/>
+</mask>
+<g mask="url(#mask0_0_13)">
+<path id="Line 7" d="M-153.167 162.893C-153.167 162.893 -60.5963 459.44 166.901 373.421C412.859 280.421 218.812 -100.355 75.4594 -27.7556C7.18519 6.82103 32.2729 113.091 102.408 152.589C178.248 208.723 287.276 187.912 337.566 153.173C511.651 32.9192 384.369 -174.439 384.369 -174.439" stroke="url(#paint1_linear_0_13)" stroke-width="80"/>
+</g>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_13" x1="195" y1="0" x2="195" y2="348" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white" stop-opacity="0"/>
+</linearGradient>
+<linearGradient id="paint1_linear_0_13" x1="431.933" y1="23.0444" x2="27.2328" y2="481.884" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="0.475962" stop-color="white"/>
+<stop offset="1" stop-color="white"/>
+</linearGradient>
+<clipPath id="clip0_0_13">
+<rect width="390" height="300" fill="white"/>
+</clipPath>
+</defs>
+</svg>
