@@ -1236,13 +1236,14 @@
 .demo-scenarios{position:fixed;left:20px;bottom:20px;width:220px;z-index:99;color:#526f7f;font:12px/18px system-ui,sans-serif}
 .demo-scenarios[open]{padding:16px;border:1px solid #d8eaf2;border-radius:16px;background:#fff;box-shadow:0 8px 24px #19384514;max-height:75vh;overflow:auto}
 .demo-scenarios summary{cursor:pointer}
-.meal-simulator{position:fixed;left:20px;bottom:20px;z-index:100;display:grid;justify-items:start;gap:8px;color:#193845;font:12px/18px system-ui,sans-serif}
-.meal-simulator button{font:inherit;color:inherit;box-sizing:border-box;cursor:pointer}
-.meal-simulator-toggle{display:flex;align-items:center;gap:8px;height:34px;padding:0 12px;border:1px solid #d8eaf2;border-radius:10px;background:#fff;box-shadow:0 2px 8px #1938450a}
-.meal-simulator svg{width:16px;height:16px;flex:none}
-.meal-simulator button:disabled{opacity:.55;cursor:default}
-.meal-simulator-finish{border:0;padding:0 4px;background:none;font-size:11px!important;color:#526f7f!important}
-.meal-simulator button:focus-visible{outline:2px solid #079fd4;outline-offset:2px}
+.plan-demo-controls{position:fixed;left:20px;bottom:20px;z-index:100;color:#193845;font:12px/18px system-ui,sans-serif;max-width:220px}
+.plan-demo-controls>small{display:block;margin-bottom:8px;color:#526f7f;font-size:11px}
+.plan-demo-controls>div{display:grid;grid-template-columns:repeat(2,96px);gap:8px}
+.plan-demo-controls button{height:34px;padding:0 12px;border:1px solid #d8eaf2;border-radius:10px;background:#fff;color:inherit;font:inherit;cursor:pointer;box-shadow:0 2px 8px #1938450a}
+.plan-demo-controls button[aria-pressed="true"]{background:#e9f7fc;border-color:#83cbe4}
+.plan-demo-controls button:disabled{opacity:.45;cursor:default}
+.plan-demo-controls button:focus-visible{outline:2px solid #079fd4;outline-offset:2px}
+
 .demo-scenarios p{font-size:11px;line-height:16px}
 .demo-scenarios button{display:block;width:100%;margin:8px 0 0;padding:8px 12px;text-align:left;background:#edf8fc;color:#193845;border:0;border-radius:8px;font:12px/18px system-ui,sans-serif}
 .sync-profile{padding-bottom:32px}
