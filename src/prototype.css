@@ -1236,10 +1236,10 @@
 .demo-scenarios{position:fixed;left:20px;bottom:20px;width:220px;z-index:99;color:#526f7f;font:12px/18px system-ui,sans-serif}
 .demo-scenarios[open]{padding:16px;border:1px solid #d8eaf2;border-radius:16px;background:#fff;box-shadow:0 8px 24px #19384514;max-height:75vh;overflow:auto}
 .demo-scenarios summary{cursor:pointer}
-.meal-simulator{position:fixed;right:24px;bottom:24px;z-index:100;color:#193845;font:12px/18px system-ui,sans-serif}
+.meal-simulator{position:fixed;left:20px;bottom:20px;z-index:100;color:#193845;font:12px/18px system-ui,sans-serif}
 .meal-simulator button,.meal-simulator textarea,.meal-simulator select{font:inherit;color:inherit;box-sizing:border-box}
 .meal-simulator button{cursor:pointer}
-.meal-simulator-toggle{display:flex;align-items:center;gap:8px;margin-left:auto;height:34px;padding:0 12px;border:1px solid #d8eaf2;border-radius:10px;background:#fff;box-shadow:0 2px 8px #1938450a}
+.meal-simulator-toggle{display:flex;align-items:center;gap:8px;margin-right:auto;height:34px;padding:0 12px;border:1px solid #d8eaf2;border-radius:10px;background:#fff;box-shadow:0 2px 8px #1938450a}
 .meal-simulator svg{width:16px;height:16px;flex:none}
 .meal-simulator-toggle .is-open{transform:rotate(-90deg)}
 .meal-simulator-panel{width:280px;max-width:calc(100vw - 48px);max-height:70vh;overflow:auto;background:#fff;border:1px solid #d8eaf2;border-radius:16px;padding:16px;margin-bottom:10px;box-shadow:0 12px 40px #19384520}

@@ -28,7 +28,7 @@ test('coffee notes are selected, edited, saved, and available during a demo call
 });
 
 test('meal reflection can be saved with choices only and no free-text note',async({page})=>{
- await demo(page);await scenario(page,'Meal invitation');await scenario(page,'Recipient accepts');await scenario(page,'Meal ends');
+ await demo(page);await scenario(page,'Meal invitation');await page.getByRole('button',{name:'Mock reply',exact:true}).click();await page.getByRole('button',{name:'Accept invitation',exact:true}).click();await page.getByRole('button',{name:'Finish meal → Reflect',exact:true}).click();
  await page.getByRole('button',{name:'Write feedback',exact:true}).click();await expect(page.getByRole('button',{name:'Save feedback',exact:true})).toBeDisabled();
  await page.getByRole('button',{name:'Great',exact:true}).click();await page.getByRole('button',{name:'Easy conversation',exact:true}).click();
  await page.getByRole('button',{name:'Yes',exact:true}).click();await page.getByRole('button',{name:'Save feedback',exact:true}).click();
@@ -81,8 +81,8 @@ test('a withdrawn invitation cannot be revived by the simulated reply timer',asy
 });
 
 test('meal confirmation requires explicit simulation and current screens have no missing assets',async({page})=>{
- await demo(page);await scenario(page,'Meal invitation');await page.waitForTimeout(4800);await expect(page.getByRole('button',{name:'I’m here',exact:true})).toHaveCount(0);await page.getByRole('button',{name:'Simulate reply',exact:true}).click();await page.getByRole('button',{name:'Accept invitation',exact:true}).click();await expect(page.getByRole('button',{name:'I’m here',exact:true})).toBeVisible();
- await scenario(page,'Avatar onboarding');await expect(page.locator('.avatar-empty img')).toBeVisible();await page.screenshot({path:'test-results/latest-avatar-onboarding.png'});
+ await demo(page);await scenario(page,'Meal invitation');await page.waitForTimeout(4800);await expect(page.getByRole('button',{name:'I’m here',exact:true})).toHaveCount(0);await page.getByRole('button',{name:'Mock reply',exact:true}).click();await page.getByRole('button',{name:'Accept invitation',exact:true}).click();await expect(page.getByRole('button',{name:'I’m here',exact:true})).toBeVisible();
+ await page.getByRole('button',{name:'Go back',exact:true}).click();await scenario(page,'Avatar onboarding');await expect(page.locator('.avatar-empty img')).toBeVisible();await page.screenshot({path:'test-results/latest-avatar-onboarding.png'});
  await page.getByRole('button',{name:'Take photo',exact:true}).click();await page.getByRole('button',{name:'Create my AI avatar',exact:true}).click();await expect(page.getByRole('button',{name:'Use this avatar',exact:true})).toBeVisible();
  expect(await page.locator('.avatar-capture-frame>img').evaluate((e:HTMLImageElement)=>e.complete&&e.naturalWidth>0)).toBe(true);
  await scenario(page,'Confirmed casual plan');await page.getByRole('button',{name:/Our map Shared places/}).click();await page.getByLabel('Add a shared place',{exact:true}).click();await page.screenshot({path:'test-results/latest-shared-map.png'});
