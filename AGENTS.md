@@ -202,3 +202,5 @@ When any text-entry control loses focus, dismiss the simulated keyboard. If the 
 - October 6 reply-control clarification: on a Meal conversation, show only a compact bottom-left “Mock reply” trigger outside the phone. Hide the general Demo scenarios launcher there; replies act on the current invitation and append to the same conversation, without switching or seeding another plan.
 
 - Coffee call preview: keep Join chat in the shared fixed action footer above the device safe area. Size the video preview for the device screen so the participant, camera controls, and Join action are visible on entry.
+
+- Our map follows Figma `1060:23251`: preserve the 390×580 campus art and node positions, 28px side-by-side companion avatars, 14/22 selected-place label, 64px thumbnail, and a 168px place panel anchored above the device safe area. The map and panel sit outside MobileScroll. Self avatars read the same selected avatar across map, activities, Meal participants, and QR profile; demo bypass starts with the cartoon sample, while fresh signup/onboarding starts empty.

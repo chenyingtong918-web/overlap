@@ -1,0 +1,16 @@
+{
+  "fileKey": "O7CniMMb53BzcMZzmh5bd5",
+  "nodeId": "1060:23251",
+  "downloaded": "2026-10-06",
+  "assets": {
+    "tree-small.svg": "1084:6545",
+    "tree-large.svg": "1084:6546",
+    "pin-halo.svg": "1084:6558",
+    "pin-center.svg": "1084:6559",
+    "close.svg": "1084:6593"
+  },
+  "reusedExactMatches": {
+    "/figma/campus-map.svg": "1084:6510",
+    "/photos/walk.jpg": "1084:6494"
+  }
+}

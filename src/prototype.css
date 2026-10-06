@@ -1376,3 +1376,28 @@
 .onboarding-screen:has(.social-card-review) .onboarding-footer-back{background:#edf8fc;border:1px solid #d9eaf2;color:#526f7f}
 .onboarding-screen:has(.social-card-review) .onboarding-footer-back img{width:18px;height:18px}
 .onboarding-screen:has(.social-card-review) .onboarding-footer-continue{font:500 14px/20px Poppins,sans-serif;box-shadow:none}
+
+/* Figma 1060:23251 — fixed map coordinates, with a safe-area spot panel. */
+.our-map-screen>.overlap-scroll{display:none}
+.our-map{position:absolute;top:calc(var(--device-safe-area-top,59px) + 69px);left:0;right:0;bottom:0;color:#193845;font-family:Poppins,sans-serif}
+.our-map-companions{display:flex;align-items:center;gap:8px;padding:0 24px;height:28px}
+.our-map-companions .avatar{width:28px;height:28px;min-width:28px;border:0;background:#edf8fc;font-size:12px}
+.our-map-companions strong{font-size:14px;line-height:22px;font-weight:500;white-space:nowrap}
+.our-map-canvas{position:absolute;top:46px;left:0;right:0;height:580px;background:#edf8fc;overflow:hidden}
+.our-map-art{position:absolute;left:50%;top:0;width:390px;height:580px;transform:translateX(-50%);transform-origin:top center}
+.our-map-base,.our-map-tree{position:absolute;display:block}
+.our-map-base{left:0;top:0}
+.our-map-label{position:absolute;font-size:12px;line-height:18px;color:#526f7f}
+.our-map-label.garden{left:25px;top:153px}.our-map-label.library{left:17px;top:321px}.our-map-label.path{left:157px;top:270px}.our-map-label.gate{left:248px;top:397px}
+.our-map-pin{position:absolute;width:32px;height:32px}.our-map-pin img{position:absolute;left:0;top:0}.our-map-pin img+img{left:8px;top:8px}
+.our-map-count{position:absolute;left:24px;top:16px;background:#079fd4;color:#fff;border-radius:14px;padding:5px 12px;font-size:12px;line-height:18px;font-weight:500}
+.our-map-north{position:absolute;right:24px;top:42px;display:grid;place-items:center;width:32px;height:32px;background:white;border-radius:50%;color:#526f7f;font-size:12px;line-height:18px}
+.our-map-add{position:absolute;left:211px;top:188px;width:44px;height:44px;padding:0;display:grid;place-items:center;border:1px solid #526f7f;border-radius:50%;background:white;color:#526f7f;font:500 24px/32px Poppins,sans-serif!important}
+.our-map-photo-pin{position:absolute;left:199px;top:176px;width:68px;height:68px;padding:4px;border:0;border-radius:16px;background:white;box-shadow:0 5px 14px #1c60763d}.our-map-photo-pin img{width:100%;height:100%;object-fit:cover;border-radius:12px}
+.our-map-panel{position:absolute;left:24px;right:24px;padding:20px;display:flex;flex-direction:column;gap:16px;background:white;border-radius:24px;box-shadow:0 4px 20px #14384717}
+.our-map-spot{display:flex;align-items:center;gap:12px}.our-map-spot>img{width:64px;height:64px;flex:none;object-fit:cover;border-radius:14px}.our-map-spot>div{display:flex;flex-direction:column;gap:4px;min-width:0}
+.our-map-spot strong{font-size:14px;line-height:22px;font-weight:500}.our-map-spot small{font-size:12px;line-height:18px;font-weight:400;min-height:22px}
+.our-map-panel .button{height:48px;min-height:48px;margin:0;font-size:14px;line-height:20px;font-weight:500;border-radius:24px}
+.our-map-panel h2{font-size:18px;line-height:26px;font-weight:500;margin:0}
+.our-map-close{position:absolute;right:0;top:-44px;width:36px;height:36px;padding:0;border:0;border-radius:50%;background:#edf7fa;display:grid;place-items:center}
+.our-map button:focus-visible{outline:2px solid #079fd4;outline-offset:3px}
