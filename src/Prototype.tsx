@@ -79,26 +79,12 @@ function Avatar({name,blue=false,photo}:{name:string;blue?:boolean;photo?:string
  const initials=name.includes(' ')?name.split(' ').map(part=>part[0]).join('').slice(0,2):name;
  return <span className={'avatar '+(blue?'blue ':'')+(src?'avatar-photo':'')}>{src?<img src={src} alt="" draggable={false}/>:initials}</span>;
 }
-function MealReplySimulator({plan,onReply,onMessage,onAgree,onFinish}:{plan:Plan;onReply:(action:'accept'|'propose'|'decline'|'expire')=>void;onMessage:(who:string,text:string)=>void;onAgree:()=>void;onFinish:()=>void}){
- const [open,setOpen]=useState(false),[message,setMessage]=useState(''),[sender,setSender]=useState(plan.meal!.participants[0]);
- const root=useRef<HTMLElement>(null);
- const next=plan.meal!.participants.find(person=>!plan.meal!.accepted.includes(person));
- const closed=['Cancelled','Declined','Expired','Completed'].includes(plan.status);
- useEffect(()=>{if(!open)return;const outside=(event:PointerEvent)=>{if(!root.current?.contains(event.target as Node))setOpen(false)};const escape=(event:KeyboardEvent)=>{if(event.key==='Escape'){setOpen(false);root.current?.querySelector<HTMLButtonElement>('.meal-simulator-toggle')?.focus()}};document.addEventListener('pointerdown',outside);document.addEventListener('keydown',escape);return()=>{document.removeEventListener('pointerdown',outside);document.removeEventListener('keydown',escape)}},[open]);
- return <aside className="meal-simulator" ref={root} aria-label="Meal reply simulator">
-  {open&&<section id="meal-simulator-options" className="meal-simulator-panel" aria-label="Simulated meal replies">
-   <div className="meal-simulator-heading"><strong>Mock reply</strong><button aria-label="Close reply simulator" onClick={()=>setOpen(false)}><Cross1Icon/></button></div>
-   <p>Demo only · Replies arrive when you click.</p>
-   {closed?<p>This invitation is {plan.status.toLowerCase()}.</p>:<>
-    {plan.status==='Pending'&&next&&<div className="meal-simulator-actions"><small>Reply as {next}</small><button onClick={()=>onReply('accept')}>Accept invitation<CheckIcon/></button>{plan.meal!.participants.length===1&&<button onClick={()=>onReply('propose')}>Suggest 30 minutes later<ClockIcon/></button>}<button onClick={()=>onReply('decline')}>Decline invitation</button></div>}
-    {plan.status==='Discussing'&&(plan.meal!.detailsPending?<button className="meal-simulator-agree" onClick={onAgree}>Agree to your new details<CheckIcon/></button>:<p>They suggested a new time. Agree or edit it inside the phone.</p>)}
-    <div className="meal-simulator-actions"><label>Send a message as<select aria-label="Simulated sender" value={sender} onChange={event=>setSender(event.target.value)}>{plan.meal!.participants.map(person=><option key={person}>{person}</option>)}</select></label>
-     {plan.status==='Confirmed'?<><button onClick={()=>onMessage(sender,'I’m here! See you by the entrance.')}>“I’m here!”</button><button onClick={()=>onMessage(sender,'I’m running five minutes late. See you soon!')}>“Running five minutes late”</button></>:<button onClick={()=>onMessage(sender,'Thanks for the invite! Let me check my schedule.')}>“Let me check my schedule”</button>}
-     <form onSubmit={event=>{event.preventDefault();if(message.trim()){onMessage(sender,message);setMessage('')}}}><textarea aria-label="Simulated message" placeholder="Write their reply…" value={message} onChange={event=>setMessage(event.target.value)} maxLength={500} rows={2}/><button type="submit" disabled={!message.trim()}>Send reply<ArrowUpIcon/></button></form>
-    </div>{plan.status==='Confirmed'&&<button className="meal-simulator-finish" onClick={onFinish}>Finish meal → Reflect</button>}
-   </>}
-  </section>}
-  <button className="meal-simulator-toggle" aria-expanded={open} aria-controls="meal-simulator-options" onClick={()=>setOpen(value=>!value)}><ChatBubbleIcon/>Mock reply<ChevronRightIcon className={open?'is-open':''}/></button>
+function MealAcceptanceSimulator({plan,onAccept,onFinish}:{plan:Plan;onAccept:()=>void;onFinish:()=>void}){
+ const canAccept=plan.status==='Pending'||(plan.status==='Discussing'&&!!plan.meal?.detailsPending);
+ if(!canAccept&&plan.status!=='Confirmed')return null;
+ return <aside className="meal-simulator" aria-label="Meal simulation">
+  {plan.status==='Confirmed'&&<button className="meal-simulator-finish" onClick={onFinish}>Finish meal → Reflect</button>}
+  <button className="meal-simulator-toggle" disabled={!canAccept} onClick={onAccept}><CheckIcon/>{canAccept?'Mock 同意':'Mock 已同意'}</button>
  </aside>;
 }
 function CoffeeDeck({cards,itemLabel="person",ariaLabel="Coffee chat recommendations"}:{cards:ReactNode[];itemLabel?:string;ariaLabel?:string}){
@@ -356,22 +342,16 @@ export default function Prototype(){
  }
  function updatePlan(status:Plan['status']){setPlans(a=>a.map(p=>{if(p.id!==planId)return p;const messages=[...p.messages,{who:'System',text:status==='Confirmed'?'The plan is confirmed. Your calendar is up to date.':status==='Completed'?'Thanks for making time for a conversation.':status==='Declined'?'The invitation was declined.':status==='Expired'?'No reply before the meal. This invitation has closed.':'This plan was cancelled. Everyone can see the updated status.'}];return {...p,status,incoming:false,messages}}))}
  function focusMealCard(){requestAnimationFrame(()=>appRef.current?.querySelector('.overlap-scroll .mobile-scroll')?.scrollTo({top:0,behavior:'smooth'}))}
- function previewMealReply(action:'accept'|'propose'|'decline'|'expire'){
-  const everyoneAccepts=action==='accept'&&!!current.meal&&current.meal.accepted.length+1===current.meal.participants.length;
-  setPlans(items=>items.map(p=>{if(p.id!==planId||!p.meal||p.status!=='Pending')return p;const next=p.meal.participants.find(person=>!p.meal!.accepted.includes(person));if(!next)return p;
-   if(action==='decline'||action==='expire')return {...p,status:action==='decline'?'Declined':'Expired',messages:[...p.messages,{who:action==='decline'?next:'System',text:action==='decline'?'Thanks for asking. I can’t make it this time.':'No reply came in before the meal. This table is closed.'}]};
-   if(action==='propose'){const [hour,minute]=p.time.split(':').map(Number);const proposedTime=`${String((hour+Math.floor((minute+30)/60))%24).padStart(2,'0')}:${String((minute+30)%60).padStart(2,'0')}`;return {...p,status:'Discussing',meal:{...p.meal,accepted:[next],proposedTime},messages:[...p.messages,{who:next,text:`I’d love to join! Could we meet at ${proposedTime} instead?`}]}}
-   const accepted=[...p.meal.accepted,next],everyone=accepted.length===p.meal.participants.length;
-   return {...p,status:everyone?'Confirmed':'Pending',meal:{...p.meal,accepted},messages:[...p.messages,{who:next,text:'I’m in! Looking forward to it.'}]};
-  }));setMealExpanded(state=>({...state,[planId]:!everyoneAccepts}));focusMealCard();if(everyoneAccepts)setToast('Everyone accepted. Your meal is confirmed.');
- }
- function simulateMealMessage(who:string,text:string){
-  if(!text.trim())return;keyboard.hide();
-  setPlans(items=>items.map(p=>p.id===planId&&p.meal?.participants.includes(who)&&['Pending','Discussing','Confirmed'].includes(p.status)?{...p,messages:[...p.messages,{who,text:text.trim()}]}:p));
-  requestAnimationFrame(()=>{const scroll=appRef.current?.querySelector<HTMLElement>('.overlap-scroll .mobile-scroll');scroll?.scrollTo({top:scroll.scrollHeight,behavior:'smooth'})});
- }
- function simulateMealAgreement(){
-  keyboard.hide();setPlans(items=>items.map(p=>p.id!==planId||!p.meal||p.status!=='Discussing'||!p.meal.detailsPending?p:{...p,status:'Confirmed',time:p.meal.proposedTime||p.time,place:p.meal.proposedPlace||p.place,meal:{...p.meal,accepted:[...p.meal.participants],proposedTime:undefined,proposedPlace:undefined,detailsPending:false},messages:[...p.messages,{who:p.meal.participants[0],text:'That works for me. See you there!'}]}));
+ function mockMealAcceptance(){
+  keyboard.hide();
+  setPlans(items=>items.map(p=>{
+   if(p.id!==planId||!p.meal||(p.status!=='Pending'&&!(p.status==='Discussing'&&p.meal.detailsPending)))return p;
+   const changedDetails=p.status==='Discussing';
+   const replying=changedDetails?p.meal.participants:p.meal.participants.filter(person=>!p.meal!.accepted.includes(person));
+   return {...p,status:'Confirmed',time:p.meal.proposedTime||p.time,place:p.meal.proposedPlace||p.place,
+    meal:{...p.meal,accepted:[...p.meal.participants],proposedTime:undefined,proposedPlace:undefined,detailsPending:false},
+    messages:[...p.messages,...replying.map(who=>({who,text:changedDetails?'That works for me. See you there!':'I’m in! Looking forward to it.'}))]};
+  }));
   setMealExpanded(state=>({...state,[planId]:false}));focusMealCard();
  }
  function confirmMealDetails(){setPlans(items=>items.map(p=>p.id!==planId||!p.meal?p:{...p,status:'Confirmed',time:p.meal.proposedTime||p.time,place:p.meal.proposedPlace||p.place,meal:{...p.meal,proposedTime:undefined,proposedPlace:undefined,detailsPending:false}}));setMealExpanded(state=>({...state,[planId]:false}));focusMealCard();setToast('Your meal is confirmed.')}
@@ -458,8 +438,6 @@ export default function Prototype(){
     </div>
    </article>
    <div className="meal-thread-messages">{p.messages.filter(message=>message.who!=='System').map((message,index)=><div className={message.who==='You'?'user-bubble':'other-bubble'} key={index}>{message.who!=='You'&&<strong>{message.who}</strong>}{message.text}</div>)}</div>
-   {p.status==='Pending'&&<div className="meal-preview-controls"><span>PREVIEW THEIR RESPONSE</span><button onClick={()=>previewMealReply('accept')}>Accept as {next?.split(' ')[0]}<CheckIcon/></button>{tableSize===2&&<button onClick={()=>previewMealReply('propose')}>Suggest another time<ClockIcon/></button>}<button onClick={()=>previewMealReply('decline')}>Decline invitation<ArrowRightIcon/></button><button onClick={()=>previewMealReply('expire')}>No reply before {label.toLowerCase()}<ArrowRightIcon/></button></div>}
-   {p.status==='Confirmed'&&<div className="meal-preview-controls"><span>PREVIEW · AFTER YOUR MEAL</span><button onClick={previewAfterMeal}>Preview feedback stage<ArrowRightIcon/></button></div>}
   </section>
  }
  function patchCasual(change:Partial<CasualProgress>,message?:string){setPlans(items=>items.map(p=>p.id===planId?{...p,casual:{...p.casual,...change},messages:message?[...p.messages,{who:'You',text:message}]:p.messages}:p))}
@@ -558,7 +536,7 @@ export default function Prototype(){
  return <div ref={appRef} className={'overlap-app conversation-first '+(view==='home'?'is-chat-home ':'')+(view==='assistant'||view==='coffee-prep'?'assistant-screen ':'')+(view==='coffee-prep'?'coffee-prep-screen ':'')+(view==='assistant'&&kind==='lunch'?'lunch-guided ':'')+(view==='assistant'&&kind==='coffee'?'coffee-guided ':'')+(view==='assistant'&&kind==='activity'?'casual-guided ':'')+(view==='explore'?'explore-screen ':'')+(view==='casual-map'?'our-map-screen ':'')+(view==='onboarding'?'onboarding-screen ':'')+(isPrimary?'primary-screen':'detail-screen')}>
 
  {processNavigation}
- {view==='thread'&&current.kind==='lunch'&&current.meal&&createPortal(<MealReplySimulator key={current.id} plan={current} onReply={action=>{keyboard.hide();previewMealReply(action)}} onMessage={simulateMealMessage} onAgree={simulateMealAgreement} onFinish={previewAfterMeal}/>,document.body)}
+ {view==='thread'&&current.kind==='lunch'&&current.meal&&createPortal(<MealAcceptanceSimulator plan={current} onAccept={mockMealAcceptance} onFinish={previewAfterMeal}/>,document.body)}
  {!(view==='thread'&&current.kind==='lunch'&&current.meal)&&createPortal(<details className="demo-scenarios" onClick={e=>{if((e.target as HTMLElement).closest('button'))e.currentTarget.open=false}}><summary>Demo scenarios</summary><p>Local states only · no messages, calls or AI requests are sent.</p><button onClick={()=>{setStep(0);setAvatarStage('empty');setAvatarPhoto('');go('onboarding')}}>Avatar onboarding</button><button onClick={()=>{const id=Date.now();setPlans(ps=>[...ps,{id,kind:'lunch',title:'Lunch with Noah Yu',date:new Date().getDate(),time:'12:00',place:'Common Table · Building A',format:'In person',people:'Noah Yu',status:'Pending',meal:{food:'Noodles',participants:['Noah Yu'],accepted:[]},messages:[{who:'You',text:'Hi Noah! We matched for lunch today. I’m thinking noodles around 12:00. Would you like to join me at Common Table?'}]}]);setPlanId(id);go('thread')}}>Meal invitation</button><button onClick={()=>{const id=Date.now();setPlans(ps=>[...ps,{id,kind:'coffee',title:'Moving into product',date:new Date().getDate(),time:'15:00',place:'Online',format:'Online',people:'Zoe Lin',status:'Confirmed',coffee:{dateISO:coffeeDate(),duration:'20 min',link:'',note:'',flexible:false},messages:[]}]);setPlanId(id);go('thread')}}>Confirmed coffee chat</button>{[false,true].map(group=><button key={String(group)} onClick={()=>{const id=Date.now();setPlans(ps=>[...ps,{id,momentId:2,kind:'activity',title:'A slow photo walk',date:new Date().getDate(),time:'18:15',place:'Campus A south gate',format:'In person',people:group?'Alex & Emma':'Alex Lin',status:'Confirmed',casual:{group},messages:[{who:'You',text:'I’d love a slow walk before heading home.'},{who:'Alex',text:'See you at 18:15!'}]}]);setPlanId(id);go('thread')}}>{group?'Group casual plan':'Confirmed casual plan'}</button>)}{stage==='scheduled'&&<button onClick={draw}>Scheduled reveal</button>}</details>,document.body)}
 
  {view!=='onboarding'&&isPrimary&&<header className="top-bar">

@@ -1,6 +1,5 @@
 import {test,expect,type Page} from '@playwright/test';
 
-async function openReplies(page:Page){await page.getByRole('button',{name:'Mock reply',exact:true}).click();return page.getByRole('region',{name:'Simulated meal replies',exact:true});}
 async function pendingMeal(page:Page){await page.goto('/');await page.getByRole('button',{name:'Explore the demo',exact:true}).click();await page.getByText('Demo scenarios',{exact:true}).click();await page.getByRole('button',{name:'Meal invitation',exact:true}).click();}
 
 test('See the invitation stays waiting; group acceptance and messages are deliberate',async({page})=>{
@@ -11,24 +10,35 @@ test('See the invitation stays waiting; group acceptance and messages are delibe
  await page.getByRole('button',{name:'See the invitation',exact:true}).waitFor();await page.waitForTimeout(4800);await page.getByRole('button',{name:'See the invitation',exact:true}).click();
  await expect(page.locator('.meal-flow-status')).toHaveText('Waiting');await expect(page.getByRole('button',{name:'I’m here',exact:true})).toHaveCount(0);
  await expect(page.getByText('Demo scenarios',{exact:true})).toHaveCount(0);
- const trigger=page.getByRole('button',{name:'Mock reply',exact:true});
+ const trigger=page.getByRole('button',{name:'Mock 同意',exact:true});
  const position=await trigger.boundingBox();const phone=await page.locator('.phone-device').boundingBox();
  expect(position!.height).toBe(34);expect(position!.x+position!.width).toBeLessThan(phone!.x);expect(position!.y).toBeGreaterThan(page.viewportSize()!.height-60);
- const panel=await openReplies(page);expect(await panel.evaluate(el=>el.closest('.overlap-app')===null)).toBe(true);
- await panel.getByRole('button',{name:'“Let me check my schedule”',exact:true}).click();await expect(page.locator('.other-bubble').last()).toContainText('Let me check my schedule');await expect(page.locator('.meal-flow-status')).toHaveText('Waiting');
- await panel.getByRole('button',{name:'Accept invitation',exact:true}).click();await expect(page.locator('.meal-flow-status')).toHaveText('Waiting');await expect(panel.getByText('Reply as Noah Yu',{exact:true})).toBeVisible();
- await panel.getByRole('button',{name:'Accept invitation',exact:true}).click();await expect(page.locator('.meal-flow-status')).toHaveText('Confirmed');await expect(page.getByRole('button',{name:'I’m here',exact:true})).toBeVisible();
- await panel.getByLabel('Simulated sender').selectOption('Noah Yu');await panel.getByLabel('Simulated message').fill('I’ll wait beside the café door.');await panel.getByRole('button',{name:'Send reply',exact:true}).click();await expect(page.locator('.other-bubble').last()).toContainText('Noah Yu');await expect(page.locator('.other-bubble').last()).toContainText('I’ll wait beside the café door.');
- await expect.poll(async()=>{const bubble=await page.locator('.other-bubble').last().boundingBox();const composer=await page.locator('.human-composer').boundingBox();return !!bubble&&!!composer&&bubble.y+bubble.height<=composer.y+1}).toBe(true);await page.mouse.move(0,0);await page.screenshot({path:'test-results/meal-reply-simulator.png'});
- await page.keyboard.press('Escape');await expect(panel).toHaveCount(0);await page.getByRole('button',{name:'Go back',exact:true}).click();await expect(page.getByRole('button',{name:'Mock reply',exact:true})).toHaveCount(0);
+ await trigger.click();
+ await expect(page.locator('.meal-flow-status')).toHaveText('Confirmed');await expect(page.locator('.meal-step[aria-current="step"]')).toHaveText('Meet');
+ await expect(page.getByRole('button',{name:'I’m here',exact:true})).toBeVisible();
+ await expect(page.locator('.meal-thread-messages .other-bubble')).toHaveCount(2);
+ for(const reply of await page.locator('.meal-thread-messages .other-bubble').all())await expect(reply).toContainText('I’m in! Looking forward to it.');
+ await expect(page.getByRole('button',{name:'Mock 已同意',exact:true})).toBeDisabled();
+ await expect(page.locator('.meal-simulator-panel')).toHaveCount(0);
+ await page.mouse.move(0,0);await page.screenshot({path:'test-results/meal-mock-accept.png'});
+ await page.getByRole('button',{name:'Go back',exact:true}).click();await expect(page.locator('.meal-simulator')).toHaveCount(0);
 });
 
-test('counterproposal and edited details require explicit agreement',async({page})=>{
- await pendingMeal(page);const panel=await openReplies(page);await panel.getByRole('button',{name:'Suggest 30 minutes later',exact:true}).click();await expect(page.getByRole('button',{name:'Agree to 12:30',exact:true})).toBeVisible();await expect(page.locator('.meal-flow-status')).toHaveText('Making plans');
- await page.getByRole('button',{name:'Change time or meeting point',exact:true}).click();await page.getByRole('dialog').getByRole('button',{name:'13:00',exact:true}).click();await page.getByRole('button',{name:'Suggest these details',exact:true}).click();await page.waitForTimeout(4800);await expect(page.locator('.meal-flow-status')).toHaveText('Making plans');
- await openReplies(page);await panel.getByRole('button',{name:'Agree to your new details',exact:true}).click();await expect(page.locator('.meal-flow-status')).toHaveText('Confirmed');await expect(page.locator('.meal-compact-facts')).toContainText('13:00');await expect(page.locator('.other-bubble').last()).toContainText('That works for me. See you there!');
+test('one click confirms the same invitation and cannot append duplicate replies',async({page})=>{
+ await pendingMeal(page);const invitation=await page.locator('.meal-thread-messages .user-bubble').innerText();
+ await page.getByRole('button',{name:'Mock 同意',exact:true}).dblclick();
+ await expect(page.locator('.meal-flow-status')).toHaveText('Confirmed');
+ await expect(page.locator('.meal-step[aria-current="step"]')).toHaveText('Meet');
+ await expect(page.locator('.meal-thread-messages .user-bubble')).toHaveText(invitation);
+ await expect(page.locator('.meal-thread-messages .other-bubble')).toHaveCount(1);
+ await expect(page.locator('.meal-thread-messages .other-bubble')).toContainText('Noah Yu');
+ await expect(page.getByRole('button',{name:'Mock 已同意',exact:true})).toBeDisabled();
+ await expect(page.locator('.human-composer')).toBeVisible();
 });
 
-test('declining closes simulation actions without a delayed acceptance',async({page})=>{
- await pendingMeal(page);const panel=await openReplies(page);await panel.getByRole('button',{name:'Decline invitation',exact:true}).click();await expect(page.locator('.meal-flow-status')).toHaveText('Declined');await expect(panel.getByRole('button',{name:'Accept invitation',exact:true})).toHaveCount(0);await expect(panel.getByLabel('Simulated message')).toHaveCount(0);await page.waitForTimeout(4800);await expect(page.locator('.meal-flow-status')).toHaveText('Declined');
+test('withdrawing hides mock acceptance and never reopens the invitation',async({page})=>{
+ await pendingMeal(page);await page.getByRole('button',{name:'Expand lunch plan details',exact:true}).click();
+ await page.getByRole('button',{name:'Withdraw invitation',exact:true}).click();await page.getByRole('dialog').getByRole('button',{name:'Withdraw invitation',exact:true}).click();
+ await expect(page.locator('.meal-flow-status')).toHaveText('Cancelled');await expect(page.locator('.meal-simulator')).toHaveCount(0);
+ await page.waitForTimeout(4800);await expect(page.locator('.meal-flow-status')).toHaveText('Cancelled');await expect(page.locator('.meal-thread-messages .other-bubble')).toHaveCount(0);
 });
