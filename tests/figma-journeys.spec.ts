@@ -37,12 +37,12 @@ test('meal reflection can be saved with choices only and no free-text note',asyn
 
 test('casual activities need shared approval before confirmation, then support photo memories',async({page})=>{
  await demo(page);await scenario(page,'Confirmed casual plan');await page.getByRole('button',{name:/Explore together More ideas/}).click();
- await page.getByRole('button',{name:'Add to our list',exact:true}).first().click();await page.getByRole('button',{name:'Confirm selection · 1',exact:true}).click();
+ await page.getByRole('button',{name:'Add to our list',exact:true}).first().click();await page.getByRole('button',{name:'Confirm selection',exact:true}).click();
  await expect(page.getByRole('button',{name:'Confirm plan',exact:true})).toBeDisabled();await expect(page.getByText('Awaiting Alex',{exact:true})).toBeVisible();
- await expect(page.getByRole('button',{name:'Confirm plan',exact:true})).toBeEnabled();await page.getByRole('button',{name:'Confirm plan',exact:true}).click();
- await page.getByRole('button',{name:'I’m here',exact:true}).click();await page.getByRole('button',{name:'Open our map',exact:true}).click();
+ await page.getByRole('button',{name:'Confirm A little tea break',exact:true}).click();await expect(page.getByRole('button',{name:'Confirm plan',exact:true})).toBeEnabled();await page.getByRole('button',{name:'Confirm plan',exact:true}).click();
+ await page.getByRole('button',{name:'I’m here',exact:true}).click();await page.getByRole('button',{name:/Our map Our shared places/}).click();
  await page.getByLabel('Add a shared place',{exact:true}).click();await page.getByRole('button',{name:'Add our moment',exact:true}).click();
- await page.getByRole('button',{name:'Take photo',exact:true}).click();await page.getByRole('button',{name:'Light up this place',exact:true}).click();
+ await page.getByRole('button',{name:'Take photo',exact:true}).click();await page.getByRole('button',{name:'Add to our map',exact:true}).click();
  await expect(page.getByText('3 places lit up',{exact:true})).toBeVisible();await page.getByLabel('Open tree-lined path memory').click();
  await expect(page.getByRole('dialog')).toBeVisible();
 });
@@ -63,7 +63,7 @@ test('friend requests and private messages survive leaving Messages',async({page
 });
 
 test('group voting stays in Plan and requires a choice before confirming',async({page})=>{
- await demo(page);await scenario(page,'Group casual plan');await page.getByRole('button',{name:/Explore together More ideas/}).click();await page.getByRole('button',{name:'Add to our list',exact:true}).first().click();await page.getByRole('button',{name:'Confirm selection · 1',exact:true}).click();
+ await demo(page);await scenario(page,'Group casual plan');await page.getByRole('button',{name:/Explore together More ideas/}).click();await page.getByRole('button',{name:/A photo stop together/}).click();await page.getByRole('button',{name:'Confirm selection',exact:true}).click();
  await expect(page.getByText('1 of 3 responded',{exact:true})).toBeVisible();await expect(page.getByText('3 of 3 responded',{exact:true})).toBeVisible();
  await page.getByRole('button',{name:/Your pick/}).click();await expect(page.getByRole('button',{name:'Confirm plan',exact:true})).toBeDisabled();await page.getByRole('button',{name:/Vote for this/}).click();await page.getByRole('button',{name:'Confirm plan',exact:true}).click();await expect(page.getByRole('button',{name:'I’m here',exact:true})).toBeVisible();
 });
@@ -85,5 +85,5 @@ test('meal confirmation requires explicit simulation and current screens have no
  await page.getByRole('button',{name:'Go back',exact:true}).click();await scenario(page,'Avatar onboarding');await expect(page.locator('.avatar-empty img')).toBeVisible();await page.screenshot({path:'test-results/latest-avatar-onboarding.png'});
  await page.getByRole('button',{name:'Take photo',exact:true}).click();await page.getByRole('button',{name:'Create my AI avatar',exact:true}).click();await expect(page.getByRole('button',{name:'Use this avatar',exact:true})).toBeVisible();
  expect(await page.locator('.avatar-capture-frame>img').evaluate((e:HTMLImageElement)=>e.complete&&e.naturalWidth>0)).toBe(true);
- await scenario(page,'Confirmed casual plan');await page.getByRole('button',{name:/Our map Shared places/}).click();await page.getByLabel('Add a shared place',{exact:true}).click();await page.screenshot({path:'test-results/latest-shared-map.png'});
+ await scenario(page,'Confirmed casual plan');await page.getByRole('button',{name:/Our map Our shared places/}).click();await page.getByLabel('Add a shared place',{exact:true}).click();await page.screenshot({path:'test-results/latest-shared-map.png'});
 });

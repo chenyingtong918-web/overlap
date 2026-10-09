@@ -1,7 +1,7 @@
 import {test,expect,type Page} from '@playwright/test';
 async function openMap(page:Page){
  await page.getByText('Demo scenarios',{exact:true}).click();await page.getByRole('button',{name:'Confirmed casual plan',exact:true}).click();
- await page.getByRole('button',{name:/Our map Shared places/}).click();
+ await page.getByRole('button',{name:/Our map Our shared places/}).click();
 }
 for(const device of ['iPhone','Pixel 10'])test(`shared map matches the design and selected avatar on ${device}`,async({page})=>{
  await page.goto('/');if(device==='Pixel 10'){await page.getByRole('button',{name:'Preview device: iPhone'}).click();await page.getByRole('menuitemradio',{name:'Pixel 10',exact:true}).click();}
