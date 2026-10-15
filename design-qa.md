@@ -1,34 +1,38 @@
-# Preparing with Overlap — visual QA
+# Coffee chat empty state and meeting — visual QA
 
 Date: 2026-10-15
 
 Result: passed
 
-## Reference and scope
+## Reference
 
-The four user-supplied screenshots (Purpose, Topics, full Notes, saved notes library) are the visual source. Figma node `768:315` could not be fetched because the connector quota was exhausted. App-owned content was compared at the reference's logical 390px width against the existing 393px iPhone screen. Device chrome, live time, navigation inset and existing app background remain owned by the protected mobile runtime.
+Figma file `Xm7eRTP53bgi4eeKJ1DLCG`, complete Coffee journey `4:955` on page `3:939`. High-fidelity design context and reference screenshots were obtained for C01 `4:1405`, D02 `4:1699`, D03 `4:1728`, D04 `4:1758` through the available Figma connection. This supersedes the earlier unavailable-file limitation.
 
-## Visual verification
+## Visual checks
 
-Side-by-side normalized comparisons were rendered and visually inspected:
+The 390×844 references were compared side by side with the app's existing 393×852 iPhone viewport. Final comparisons are saved locally at:
 
-- `/private/tmp/overlap-prep-qa/purpose-final-compare.png`
-- `/private/tmp/overlap-prep-qa/topics-final-compare.png`
-- `/private/tmp/overlap-prep-qa/notes-top-final-compare.png`
-- `/private/tmp/overlap-prep-qa/saved-final-compare.png`
-- `/private/tmp/overlap-prep-qa/notes-middle-final.png` verifies the remaining notes and closing reflection can scroll above the action.
+- `/private/tmp/overlap-coffee-qa/empty-final-compare.png`
+- `/private/tmp/overlap-coffee-qa/preflight-final-compare.png`
+- `/private/tmp/overlap-coffee-qa/room-final-compare.png`
+- `/private/tmp/overlap-coffee-qa/notes-final-compare.png`
 
-Corrected mismatches: header/step positioning, heading and card spacing, card outlines and selection controls, expanded-topic layout, missing talking points and Share content, note-title typography, saved-card title wrapping, and inherited 12px action text / gray body styles. Actions use the shared fixed footer; the long reference's Notes content scrolls within the standard phone viewport. Minor differences in existing gradient and library icon silhouettes remain; no blocking visual issues remain.
+Verified the 112×116 notebook frame and 28px exported pencil; original text and spacing; preflight title, 24px-radius photo, 52px mic/camera controls, preparation switch and full-width 48px Join action; connected header and hangup; video with 72×92 self preview; Start/Topics/Close rail and inline topic card; fixed bottom controls. Corrected inherited body color, an extra horizontal action inset and the old duplicate call header. The reference blue gradients are scoped to preparation and call screens.
 
-## Behavior and regression
+Device chrome/time remain runtime-owned. The extra eight device pixels are absorbed by flexible video height and bottom-safe positioning. Both iPhone and Pixel were checked for action/card clearance. No blocking in-scope visual differences remain.
 
-- Purpose choice and intention refresh work; topic selection, expansion, editing and refresh work.
-- Deselecting a topic retains the correct remaining titles, prompts and talking points.
-- A saved note restores its title and full topic data. Re-saving updates that note; creating a new note starts a fresh draft.
-- Notes remain available in the existing coffee-call flow.
-- `npx playwright test`: 42 passed, including iPhone/Pixel runtime and prior journeys.
-- `npm run build`: passed, including protected runtime checks and TypeScript.
-- `npm run test:sites`: 4 passed.
-- Browser console inspection: no errors or warnings.
+## Assets
 
-No new raster assets or runtime modifications were required.
+Figma SVGs are stored in `public/coffee` at their natural root dimensions: pencil 28×28; mic/video/phone/notebook 20×20; bulb 19×19; switch 32×20. The notebook frame/rules are ordinary Figma layout rectangles, implemented as native layout. Figma photo downloads were hash-checked against `public/figma/video-self.png` and `video-person.png` and were byte-identical, so existing photos are reused without duplicate binaries. Asset slots and rendered geometry were inspected; no temporary remote asset URLs are used at runtime.
+
+## Interaction and regression
+
+- Preflight can open preparation and return to the preview; saved notes toggle on/off before joining.
+- A connected call has no duplicate detail header. Mic/camera controls retain their preflight choices. Camera-off hides only the self preview, leaving the other participant visible.
+- Notes toggle the inline card, retain the current topic across hide/show, advance through saved topic metadata and allow expanding full private notes. Empty preparation never invents saved notes.
+- End call returns the same plan to Reflect and its feedback action.
+- Targeted tests: 6 passed.
+- Full Playwright suite: 45 passed.
+- Build and protected runtime integrity: passed; all 28 protected files unchanged.
+- Sites packaging tests: 4 passed.
+- Browser console: no errors or warnings.
