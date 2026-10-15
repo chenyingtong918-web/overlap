@@ -36,3 +36,15 @@ Figma SVGs are stored in `public/coffee` at their natural root dimensions: penci
 - Build and protected runtime integrity: passed; all 28 protected files unchanged.
 - Sites packaging tests: 4 passed.
 - Browser console: no errors or warnings.
+
+## October 15 expanded note follow-up — D05
+
+Reference: file `Xm7eRTP53bgi4eeKJ1DLCG`, node `4:3672`. Read complete design context and its screenshot. Compared the 390×844 reference against the existing 393×852 app viewport in the browser. Proof: `/private/tmp/overlap-coffee-qa/expanded-final.png`.
+
+The expanded view now stays inside the call, uses a centered 156×156 remote video with no self overlay/name badge, and shows only the current topic in a white 24px-radius card. Verified photo y=174, card y=344, 16px padding, 12px vertical gaps, 16/24 title, 14/22 talking points/Ask/Share, and 36px Next. Fixed progress and call controls remain visible. Runtime device chrome and the extra 8px viewport height remain unchanged. Long notes scroll within the available body above controls.
+
+Verified expand/collapse, Next while expanded, topic identity after deselection, note hide/show, and Close/end-call transitions. iPhone and Pixel regression coverage checks centered square video, card/control clearance, current-topic-only content and absence of a modal. Browser console is clean.
+
+Build/runtime integrity passed (28 protected files unchanged). Full Playwright suite: 45 passed. Sites tests: 4 passed.
+
+Result: passed

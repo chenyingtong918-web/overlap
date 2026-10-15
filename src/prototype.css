@@ -1611,3 +1611,13 @@
 .coffee-meeting .coffee-video-name{min-width:66px;text-align:center}
 .coffee-prep-screen .sync-notes-empty p{width:294px;max-width:100%;flex:none}
 .conversation-first.coffee-prep-screen,.conversation-first.coffee-call-screen{background:radial-gradient(ellipse 127.28% 130.1% at 90% 8%,#b7e9ff 0%,#b7e9ff00 46%),radial-gradient(ellipse 134.35% 82.02% at 5% 42%,#e1edff 0%,#e1edff00 48%),linear-gradient(180deg,#92d8fb 0%,#e7f4fb 44%,#f4f8fc 100%)}
+
+/* D05 expands the current note in place, keeping the conversation controls visible. */
+.coffee-expanded-scroll{position:relative;inset:auto;flex:1;min-height:0}
+.note-expanded .coffee-conversation-progress{margin-bottom:14px}
+.note-expanded .coffee-video{width:156px;height:156px;flex:none;margin:0 auto}
+.note-expanded .coffee-video-name,.note-expanded .coffee-self-video{display:none}
+.note-expanded .coffee-live-note{margin-top:14px}
+.coffee-note-points{list-style:none;margin:0;padding:0;color:#526f7f;font:400 14px/22px Poppins,sans-serif}
+.coffee-note-points li:before{content:'• ';}
+.coffee-live-note p strong{font-weight:500}

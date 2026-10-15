@@ -21,9 +21,9 @@ test('coffee notes are selected, edited, saved, and available during a demo call
  await page.getByRole('button',{name:'Build my notes',exact:true}).click();await page.getByRole('button',{name:'Save my note',exact:true}).click();
  await expect(page.getByText('Only you can see these')).toBeVisible();await page.getByRole('button',{name:'Go back',exact:true}).click();
  await page.getByRole('button',{name:'Join chat',exact:true}).click();await page.getByRole('button',{name:'Join chat',exact:true}).click();
- await expect(page.getByLabel('Your current chat note')).toBeVisible();await page.getByRole('button',{name:'Expand note',exact:true}).click();await expect(page.getByRole('heading',{name:'Your chat notes',exact:true})).toBeVisible();
- await expect(page.getByRole('heading',{name:'Was there a moment when product started to feel right?',exact:true})).toBeVisible();
- await page.getByRole('button',{name:'Back to the chat',exact:true}).click();await page.getByRole('button',{name:'End call',exact:true}).click();
+ await expect(page.getByLabel('Your current chat note')).toBeVisible();await page.getByRole('button',{name:'Expand note',exact:true}).click();await expect(page.getByRole('button',{name:'Collapse note',exact:true})).toBeVisible();
+ await expect(page.getByLabel('Your current chat note')).toContainText('Was there a moment when product started to feel right?');await expect(page.getByText('Her first product responsibility',{exact:true})).toBeVisible();
+ await page.getByRole('button',{name:'Collapse note',exact:true}).click();await page.getByRole('button',{name:'End call',exact:true}).click();
  await expect(page.getByRole('button',{name:/Write feedback/})).toBeVisible();
 });
 

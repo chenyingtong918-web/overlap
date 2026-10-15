@@ -20,8 +20,14 @@ for(const device of ['iPhone','Pixel 10'])test(`coffee preflight and in-call not
  await expect(page.getByLabel('Your current chat note')).toContainText('Design skills in product');await page.getByRole('button',{name:'Next',exact:true}).click();await expect(page.getByLabel('Your current chat note')).toContainText('A first step in my role');
  await page.getByRole('button',{name:'Notes',exact:true}).click();await expect(page.getByLabel('Your current chat note')).toHaveCount(0);await page.getByRole('button',{name:'Notes',exact:true}).click();await expect(page.getByLabel('Your current chat note')).toContainText('A first step in my role');
  const card=await page.locator('.coffee-live-note').boundingBox(),controls=await page.locator('.coffee-room-controls').boundingBox();expect(card!.y+card!.height).toBeLessThan(controls!.y);expect(controls!.y+controls!.height).toBeLessThan(screen!.y+screen!.height-20);
- await page.getByRole('button',{name:'Expand note',exact:true}).click();await expect(page.getByRole('heading',{name:'Your chat notes',exact:true})).toBeVisible();await expect(page.getByText('New skills she had to develop',{exact:true})).toBeVisible();await page.getByRole('button',{name:'Back to the chat',exact:true}).click();
- await page.getByRole('button',{name:'Next',exact:true}).click();await expect(page.getByLabel('Your current chat note')).toContainText('One thing I’ll take from today is');
+ await page.getByRole('button',{name:'Expand note',exact:true}).click();await expect(page.getByRole('button',{name:'Collapse note',exact:true})).toHaveAttribute('aria-expanded','true');
+ await expect(page.getByText('A small product task to try',{exact:true})).toBeVisible();await expect(page.getByText('New skills she had to develop',{exact:true})).toHaveCount(0);
+ await expect(page.getByLabel('Your current chat note')).toContainText('Where I want to get involved and what holds me back.');
+ await expect(page.getByRole('dialog')).toHaveCount(0);
+ const expandedVideo=await page.locator('.coffee-video').boundingBox(),expandedCard=await page.locator('.coffee-live-note').boundingBox();expect(expandedVideo!.width).toBeCloseTo(expandedVideo!.height,0);expect(expandedVideo!.x+expandedVideo!.width/2).toBeCloseTo(screen!.x+screen!.width/2,0);expect(expandedCard!.y+expandedCard!.height).toBeLessThan(controls!.y);
+ await page.getByRole('button',{name:'Collapse note',exact:true}).click();await expect(page.getByLabel('Your current chat note')).toContainText('A first step in my role');
+ await page.getByRole('button',{name:'Expand note',exact:true}).click();
+ await page.getByRole('button',{name:'Next',exact:true}).click();await expect(page.getByLabel('Your current chat note')).toContainText('One thing I’ll take from today is');await expect(page.locator('.coffee-note-points')).toHaveCount(0);await page.getByRole('button',{name:'Collapse note',exact:true}).click();
  await page.getByRole('button',{name:'End call',exact:true}).click();await expect(page.getByRole('button',{name:'Write feedback',exact:true})).toBeVisible();
 });
 test('a coffee call without preparation has no invented notes and can still toggle its notes view',async({page})=>{
