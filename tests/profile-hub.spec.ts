@@ -57,11 +57,12 @@ for(const device of ['iPhone','Pixel 10'])test(`${device}: menu matches Figma sp
  await page.getByRole('button',{name:'Open menu',exact:true}).click();
  const panel=page.getByRole('dialog',{name:'Menu',exact:true});
  await expect(panel).toBeVisible();
- expect(await panel.evaluate(el=>el.clientHeight)).toBe(372);
+ expect(await panel.evaluate(el=>el.clientHeight)).toBe(436);
  expect(await panel.locator('.sheet-content').evaluateAll(els=>els.every(el=>el.scrollHeight<=el.clientHeight))).toBe(true);
  expect(await panel.locator('.sheet-title').evaluate(el=>getComputedStyle(el).fontSize)).toBe('20px');
  expect(await panel.locator('.menu-item').evaluateAll(els=>els.every(el=>el.offsetHeight===56))).toBe(true);
  expect(await panel.locator('img').evaluateAll(els=>els.every(el=>(el as HTMLImageElement).naturalWidth===el.clientWidth))).toBe(true);
+ await panel.getByRole('button',{name:'My voucher',exact:true}).click();await expect(page.locator('.hub-voucher')).toBeVisible();await page.getByRole('button',{name:'Go back',exact:true}).click();await page.getByRole('button',{name:'Open menu',exact:true}).click();
  await page.getByRole('button',{name:'Close sheet',exact:true}).click();await expect(panel).toHaveCount(0);
  await page.getByRole('button',{name:'Open menu',exact:true}).click();await page.getByRole('button',{name:'My plans',exact:true}).click();await expect(page.locator('.hub-calendar')).toBeVisible();
 });

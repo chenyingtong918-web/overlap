@@ -77,3 +77,7 @@ Added bounded pointer pan, anchored wheel/pinch zoom, 100–300% controls/reset 
 ## Casual shared photo and caption keyboard fix
 
 Downloaded original 1536×1024 PNG from 12:5435; verified portrait object-cover capture and subsequent attachments. Added app-scoped keyboard resize reveal and fixed-footer clearance; keyboard-open caption and submit remain visible, with privacy text returning after dismissal. Build/runtime pass. Two iPhone/Pixel photo regressions pass including caption bounds above footer, multiple attachments, saved text and memory reopening. Browser proof: /private/tmp/overlap-caption-visible.png.
+
+## Menu voucher entry
+
+Added My voucher after Saved posts with 16px ticket icon, existing voucher destination and origin-aware back navigation. Sheet grows to 436px so all four rows and New conversation remain visible.

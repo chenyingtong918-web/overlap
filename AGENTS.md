@@ -234,3 +234,5 @@ When any text-entry control loses focus, dismiss the simulated keyboard. If the 
 - Campus shared map supports bounded drag, 100–300% zoom, wheel/pinch, accessible zoom/reset controls and keyboard arrows/Home. Transform artwork and markers together while the place card stays fixed. Keep local campus styling, exported base map, per-plan photos and click suppression after dragging; no external map/geolocation dependency.
 
 - Casual photo flow uses the exact image exported from Figma 12:5435 at public/casual/shared-walk.png for capture and subsequent photo/memory previews. Keep the caption visible above both the keyboard and app-owned fixed action: reserve footer clearance and reveal it on keyboard resize without editing protected runtime.
+
+- Menu includes My voucher after Saved posts, using a 16px ticket icon. Increase sheet height to 436px for four rows; retain existing row spacing and bottom action. Open the existing voucher screen and return to the originating screen.
