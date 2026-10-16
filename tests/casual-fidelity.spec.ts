@@ -41,6 +41,10 @@ for(const device of ['iPhone','Pixel 10'])test(`Casual arrival uses Reflect and 
  await expect(page.getByRole('button',{name:/Our map Our shared places/})).toBeVisible();
  await expect(page.locator('.casual-v3-messages')).toContainText('I’m at the south gate.');
  await page.mouse.move(0,0);await page.screenshot({path:`test-results/casual-arrival-${device.replace(' ','-')}.png`});
+ await page.locator('.casual-v3-plan').getByRole('button',{name:'Reflect',exact:true}).click();
+ await expect(page.getByText('Private reflection',{exact:true})).toBeVisible();
+ await page.getByRole('button',{name:'Great',exact:true}).click();await page.getByRole('button',{name:'Save feedback',exact:true}).click();
+ await page.locator('.casual-v3-plan').getByRole('button',{name:'Edit feedback',exact:true}).click();await expect(page.getByRole('button',{name:'Great',exact:true})).toHaveClass(/selected/);
 });
 
 for(const device of ['iPhone','Pixel 10'])test(`Group options and unanimous result remain usable on ${device}`,async({page})=>{

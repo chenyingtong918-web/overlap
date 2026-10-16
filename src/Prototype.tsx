@@ -474,6 +474,7 @@ export default function Prototype(){
 
    </>:completed?<>{!c.photo&&<Button onClick={()=>{setMapPanel(false);go('casual-map')}}>Open our map</Button>}</>:null}
   {casualExpanded&&!c.arrived&&!['Cancelled','Declined','Expired','Completed'].includes(current.status)&&<button className="casual-cancel-action" onClick={()=>showSheet('cancel')}>{current.status==='Confirmed'?'Cancel plan':'Withdraw invitation'}</button>}
+   {!closed&&(completed||c.arrived)&&<Button onClick={()=>showSheet('casual-feedback')}>{c.feedbackSubmitted?'Edit feedback':completed?'Write feedback':'Reflect'}<ArrowRightIcon/></Button>}
    {closed&&<p className="sync-meta">This invitation is closed.</p>}
   </article>
  }
@@ -481,7 +482,6 @@ export default function Prototype(){
   {c.planning&&!c.group&&c.activities?.map(title=>{const self=(c.selfApproved||c.activities||[]).includes(title),other=!!c.approved?.includes(title);return <button key={title} className="casual-agreement-card" aria-label={self?'Unconfirm '+title:'Confirm '+title} aria-pressed={self} onClick={()=>patchCasual({selfApproved:self?(c.selfApproved||c.activities||[]).filter(t=>t!==title):[...(c.selfApproved||[]),title]})}><strong>{title}</strong><div className="casual-agreement-row"><Avatar name={name} photo={avatarPhoto}/><span>{self?'✓':'○'}</span><Avatar name={current.people}/><span>{other?'✓':'○'}</span><small>{self&&other?'Both confirmed':!self?'Waiting for you':'Waiting for '+current.people.split(' ')[0]}</small></div></button>})}
   {c.photo&&<article className="casual-shared-memory"><img src={c.photos?.[0]||'/casual/walk-figma.png'} alt="Our little photo stop"/><h2>Our little photo stop</h2><p>{casualSpot} · Today</p><div className="casual-memory-people"><Avatar name={name} photo={avatarPhoto}/><Avatar name={current.people}/><small>Saved to our map</small></div><button onClick={()=>{setMapPanel(false);go('casual-map')}}>View on our map<ArrowRightIcon/></button></article>}
   <div className="casual-v3-messages">{(c.planning?[]:current.messages).filter(m=>m.who!=='System').map((m,i)=><div className={m.who==='You'?'user-bubble':'other-bubble'} key={i}>{c.group&&m.who!=='You'&&<strong>{m.who}</strong>}{m.text}</div>)}</div>
- {current.status==='Completed'&&<button className="casual-feedback-link" onClick={()=>showSheet('casual-feedback')}>{c.feedbackSubmitted?'Edit feedback':'Write feedback'}</button>}
  </section>}
  function confirmCasualSelection(){
   const revision=Date.now(),id=planId;setCasualExpanded(false);patchCasual({activities:[...casualSelected],selfApproved:[...casualSelected],approved:[],planning:true,planningRevision:revision,votes:[...casualSelected],votesReady:false,responses:1});go('thread');

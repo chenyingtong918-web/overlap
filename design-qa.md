@@ -65,3 +65,7 @@ Matched 6:2368 sheet positions (444px height; input y114/h124; Help y246; Send y
 ## October 16 — Four Casual key states
 
 Compared 6:2474, 6:2599, 6:2670 and 6:2876. Removed default exposed cancellation, matched shared-planning radius/status spacing and five-step gaps, corrected compact agreed card order and short activity labels. Kept exported walk image, dynamic avatars, per-person approvals and arrival/map behavior. Browser verified confirmed, exploration, waiting and confirmed-additions screens. Build and protected-runtime check pass; Casual fidelity and plan-demo controls: 11 passed across iPhone/Pixel. Proof: /private/tmp/overlap-casual-compact-verified.png.
+
+## Casual Reflect entry
+
+Fixed mismatch between arrived/Reflect progress and Completed-only feedback visibility. Card now exposes Reflect upon arrival and feedback/edit on completion, reusing private feedback storage. Regression covers opening, saving and reopening on iPhone and Pixel.
