@@ -1833,3 +1833,25 @@
 .casual-guided .casual-card-actions>button:last-child{min-height:48px;font:500 14px/20px Poppins,sans-serif;background:#193845}
 .casual-guided .casual-card-actions>button:first-child{font:400 12px/18px Poppins,sans-serif}
 .casual-group-options .casual-v3-option>.casual-option-check{flex:0 0 24px;gap:0;min-width:24px;max-width:24px}
+
+
+/* Casual join request — Figma 6:2368, pending card 6:2411. */
+.sheet-overlay:has(+ .bottom-sheet .casual-join-body){z-index:27;background:rgba(13,33,46,.28);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.bottom-sheet.bottom-sheet:has(.casual-join-body){height:444px;background:#edf8fc!important;border:0;border-radius:28px 28px 0 0!important;backdrop-filter:none;-webkit-backdrop-filter:none}
+.bottom-sheet:has(.casual-join-body) .sheet-handle-zone{height:30px;align-items:start;padding-top:12px}
+.bottom-sheet:has(.casual-join-body) .sheet-handle{width:42px;height:4px;border-radius:2px;background:#d9eaf2}
+.bottom-sheet:has(.casual-join-body) .sheet-header{padding:10px 24px 12px;gap:12px}
+.bottom-sheet:has(.casual-join-body) .sheet-title{padding-right:52px}
+.bottom-sheet:has(.casual-join-body) .sync-sheet-close{top:24px;right:24px;width:36px;height:36px;background:#fff}
+.bottom-sheet:has(.casual-join-body) .casual-join-body{padding:0 24px 24px}
+.bottom-sheet:has(.casual-join-body) textarea{margin:0;border-color:#d9eaf2;color:#193845}
+.bottom-sheet:has(.casual-join-body) .casual-help-write{height:36px;display:block;margin-top:8px;padding:9px 4px}
+.bottom-sheet:has(.casual-join-body) .casual-v3-sheet-footer{padding:0 24px 60px;gap:12px;background:#edf8fc!important;border:0;flex:none}
+.bottom-sheet:has(.casual-join-body) .casual-v3-sheet-footer>.button{height:48px;min-height:48px;border:0;border-radius:24px;background:#193845;font:500 14px/20px Poppins,sans-serif}
+.bottom-sheet:has(.casual-join-body) .casual-v3-sheet-footer>span{font:400 12px/18px Poppins,sans-serif;color:#526f7f}
+.bottom-sheet:has(.casual-join-body) .moment-keyboard-open .casual-v3-sheet-footer{padding-bottom:16px}
+.casual-v3-plan .sync-plan-heading img{display:block;flex:none;transform:rotate(-90deg)}
+.casual-v3-plan .sync-plan-heading[aria-expanded=false] img{transform:rotate(90deg)}
+.casual-v3-plan>.casual-cancel-action{align-self:center;margin:0;padding:8px 12px;border:0;background:none;color:#526f7f;font:400 12px/18px Poppins,sans-serif}
+
+.casual-v3-messages>.user-bubble{max-width:calc(100% - 12px)}

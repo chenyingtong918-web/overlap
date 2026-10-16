@@ -57,3 +57,7 @@ Verified Profile saved-task state and voucher visually in the browser; task edit
 ## October 16 — Menu panel fidelity
 
 Figma 4:4257: corrected nested content padding, 20/28 title, 372px panel, white surface, handle, 24px gutters, 56px rows, 50px action and 38px bottom clearance. Scoped overlay z27/panel z28 covers the app header. Existing exported menu SVGs remain natural-sized: 16px row icons, 14px chevrons, 20px close. iPhone and Pixel geometry, no-scroll, asset geometry, dismissal and My plans navigation tests pass (6 Profile hub tests). Build and 28-file protected runtime check pass. Browser proof: /private/tmp/menu-figma-preview.png.
+
+## October 16 — Casual invitation and pending card
+
+Matched 6:2368 sheet positions (444px height; input y114/h124; Help y246; Send y306), pale surface and blurred background. Pending card 6:2411 defaults collapsed; withdrawal is inside the expanded card. Reused native 18px exported plan chevron and narrowed outgoing bubbles by 12px. Verified screenshots in /private/tmp/casual-join-updated.png and /private/tmp/casual-waiting-updated.png. Existing Casual/demo-control regressions: 9 passed; new invitation tests after focus fix: 2 passed across iPhone/Pixel. Build/runtime integrity pass.

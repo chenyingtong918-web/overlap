@@ -56,3 +56,21 @@ for(const device of ['iPhone','Pixel 10'])test(`Group options and unanimous resu
  await page.getByRole('button',{name:'Confirm plan',exact:true}).click();await expect(page.getByLabel('Casual progress: Meet')).toBeVisible();
  await expect(page.locator('.casual-added-plan')).toContainText('A photo stop together');await expect(page.locator('.casual-added-plan')).not.toContainText('A little tea break');
 });
+
+for(const device of ['iPhone','Pixel 10'])test(`Casual join sheet and collapsed withdrawal on ${device}`,async({page})=>{
+ await page.goto('/');if(device!=='iPhone'){await page.getByRole('button',{name:'Preview device: iPhone'}).click();await page.getByRole('menuitemradio',{name:device,exact:true}).click()}
+ await page.getByRole('button',{name:'Demo flows',exact:true}).click();await page.getByRole('button',{name:'Casual plan — Explore',exact:true}).click();
+ await page.locator('.explore-post').filter({hasText:'A slow photo walk'}).getByRole('button',{name:'Ask to join',exact:true}).click();await page.getByRole('button',{name:'Ask to join',exact:true}).click();
+ const sheet=page.getByRole('dialog',{name:'Ask to join',exact:true});
+ expect(await sheet.evaluate(el=>el.clientHeight)).toBe(444);
+ const positions=await sheet.evaluate(el=>{const r=el.getBoundingClientRect(),scale=r.width/el.clientWidth;return ['textarea','.casual-help-write','.casual-v3-sheet-footer>.button'].map(s=>Math.round((el.querySelector(s)!.getBoundingClientRect().y-r.y)/scale))});
+ expect(positions).toEqual([114,246,306]);
+ await page.getByLabel('Note to join',{exact:true}).fill('Can I bring my camera?');
+ await page.getByRole('button',{name:'✦ Help me write',exact:true}).click();await expect(page.getByLabel('Note to join',{exact:true})).toHaveValue('I’d love a slow walk before heading home. Mind if I join?');
+ await page.getByRole('button',{name:'Send request',exact:true}).click();await expect(sheet).toHaveCount(0);
+ await expect(page.getByRole('button',{name:'Withdraw invitation',exact:true})).toHaveCount(0);
+ await expect(page.getByLabel('Casual progress: Confirm')).toBeVisible();await expect(page.locator('.casual-v3-messages .user-bubble')).toHaveCount(1);
+ await page.getByRole('button',{name:'Expand casual plan details',exact:true}).click();await expect(page.locator('.casual-v3-plan').getByRole('button',{name:'Withdraw invitation',exact:true})).toBeVisible();
+ await expect(page.locator('.casual-v3-thread>.casual-cancel-action')).toHaveCount(0);
+ await page.getByRole('button',{name:'Collapse casual plan details',exact:true}).click();await expect(page.getByRole('button',{name:'Withdraw invitation',exact:true})).toHaveCount(0);
+});
