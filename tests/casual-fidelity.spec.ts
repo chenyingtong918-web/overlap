@@ -8,7 +8,7 @@ for(const device of ['iPhone','Pixel 10'])test(`Casual stores multiple photos an
  await start(page,device);
  const card=page.locator('.casual-v3-plan');
  await expect(card.locator('.meal-step')).toHaveCount(4);await expect(card.locator('h2')).toHaveCSS('font-size','18px');
- await page.getByRole('button',{name:'Collapse casual plan details'}).click();await expect(page.getByRole('button',{name:'I’m here',exact:true})).toBeVisible();await expect(page.getByRole('button',{name:/Explore together More ideas/})).toHaveCount(0);
+ await expect(page.getByRole('button',{name:'Cancel plan',exact:true})).toHaveCount(0);await expect(page.getByRole('button',{name:'I’m here',exact:true})).toBeVisible();await expect(page.getByRole('button',{name:/Explore together More ideas/})).toBeVisible();
  await page.getByRole('button',{name:'Expand casual plan details'}).click();await page.getByRole('button',{name:/Our map Our shared places/}).click();await page.getByLabel('Add a shared place',{exact:true}).click();await page.getByRole('button',{name:'Add our moment',exact:true}).click();
  await expect(page.getByRole('button',{name:'Take photo',exact:true})).toBeInViewport();await page.getByRole('button',{name:'Take photo',exact:true}).click();
  await page.getByLabel('Moment caption',{exact:true}).fill('The light made us stop. Glad we took the long way home.');await page.getByRole('button',{name:'Add photo',exact:true}).click();
@@ -28,7 +28,7 @@ test('Casual deck retains choices across pages and requires both people for each
  await page.getByRole('button',{name:'Confirm selection',exact:true}).click();await expect(page.getByLabel('Casual progress: Plan')).toBeVisible();await expect(page.getByRole('button',{name:'Confirm plan',exact:true})).toBeDisabled();
  await page.getByRole('button',{name:'Confirm A little tea break',exact:true}).waitFor();await expect(page.getByRole('button',{name:'Confirm plan',exact:true})).toBeDisabled();
  await page.getByRole('button',{name:'Confirm A little tea break',exact:true}).click();await page.getByRole('button',{name:'Unconfirm A photo stop together',exact:true}).click();await expect(page.getByRole('button',{name:'Confirm plan',exact:true})).toBeDisabled();
- await page.getByRole('button',{name:'Confirm A photo stop together',exact:true}).click();await page.getByRole('button',{name:'Confirm plan',exact:true}).click();await expect(page.getByLabel('Casual progress: Meet')).toBeVisible();await page.getByRole('button',{name:'Collapse casual plan details',exact:true}).click();await expect(page.locator('.casual-added-plan')).toContainText('A little tea break');
+ await page.getByRole('button',{name:'Confirm A photo stop together',exact:true}).click();await page.getByRole('button',{name:'Confirm plan',exact:true}).click();await expect(page.getByLabel('Casual progress: Meet')).toBeVisible();await expect(page.getByRole('button',{name:'Expand casual plan details',exact:true})).toBeVisible();await expect(page.locator('.casual-added-plan')).toContainText('Tea break');
 });
 
 for(const device of ['iPhone','Pixel 10'])test(`Casual arrival uses Reflect and the meeting facts on ${device}`,async({page})=>{
@@ -54,7 +54,7 @@ for(const device of ['iPhone','Pixel 10'])test(`Group options and unanimous resu
  await page.getByRole('button',{name:'Confirm selection',exact:true}).click();await expect(page.getByText('2 of 3 responded',{exact:true})).toBeVisible();
  await expect(page.getByText('3 of 3 responded',{exact:true})).toBeVisible();await expect(page.locator('.casual-group-choice b')).toHaveText(['3','2','1']);
  await page.getByRole('button',{name:'Confirm plan',exact:true}).click();await expect(page.getByLabel('Casual progress: Meet')).toBeVisible();
- await expect(page.locator('.casual-added-plan')).toContainText('A photo stop together');await expect(page.locator('.casual-added-plan')).not.toContainText('A little tea break');
+ await expect(page.locator('.casual-added-plan')).toContainText('Photo stop');await expect(page.locator('.casual-added-plan')).not.toContainText('Tea break');
 });
 
 for(const device of ['iPhone','Pixel 10'])test(`Casual join sheet and collapsed withdrawal on ${device}`,async({page})=>{

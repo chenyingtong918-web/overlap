@@ -1855,3 +1855,10 @@
 .casual-v3-plan>.casual-cancel-action{align-self:center;margin:0;padding:8px 12px;border:0;background:none;color:#526f7f;font:400 12px/18px Poppins,sans-serif}
 
 .casual-v3-messages>.user-bubble{max-width:calc(100% - 12px)}
+
+/* Casual confirmed / shared planning / compact agreed plan, 6:2474–6:2876. */
+.casual-v3-plan .meal-stepper:has(>.meal-step:nth-child(5)){gap:8px}
+.casual-agreement-card{border-radius:20px}
+.casual-agreement-row>span{width:18px;flex:none;margin:0;line-height:22px}
+.casual-added-plan small{min-height:22px;color:#193845}
+.casual-v3-ideas .casual-v3-linked button{display:flex;flex-direction:column;gap:4px}

@@ -61,3 +61,7 @@ Figma 4:4257: corrected nested content padding, 20/28 title, 372px panel, white 
 ## October 16 — Casual invitation and pending card
 
 Matched 6:2368 sheet positions (444px height; input y114/h124; Help y246; Send y306), pale surface and blurred background. Pending card 6:2411 defaults collapsed; withdrawal is inside the expanded card. Reused native 18px exported plan chevron and narrowed outgoing bubbles by 12px. Verified screenshots in /private/tmp/casual-join-updated.png and /private/tmp/casual-waiting-updated.png. Existing Casual/demo-control regressions: 9 passed; new invitation tests after focus fix: 2 passed across iPhone/Pixel. Build/runtime integrity pass.
+
+## October 16 — Four Casual key states
+
+Compared 6:2474, 6:2599, 6:2670 and 6:2876. Removed default exposed cancellation, matched shared-planning radius/status spacing and five-step gaps, corrected compact agreed card order and short activity labels. Kept exported walk image, dynamic avatars, per-person approvals and arrival/map behavior. Browser verified confirmed, exploration, waiting and confirmed-additions screens. Build and protected-runtime check pass; Casual fidelity and plan-demo controls: 11 passed across iPhone/Pixel. Proof: /private/tmp/overlap-casual-compact-verified.png.

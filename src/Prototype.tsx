@@ -190,7 +190,7 @@ export default function Prototype(){
  const [mealPosts,setMealPosts]=useState<MealPost[]>(initialMealPosts),[mealPostMeal,setMealPostMeal]=useState<'Lunch'|'Dinner'>('Lunch'),[mealPostTitle,setMealPostTitle]=useState(''),[mealPostText,setMealPostText]=useState(''),[mealPostTime,setMealPostTime]=useState('12:15'),[mealPostPlace,setMealPostPlace]=useState('Campus A · ground floor café');
  const [joinTarget,setJoinTarget]=useState<{kind:'meal';post:MealPost}|{kind:'activity';post:Moment}|null>(null),[joinNote,setJoinNote]=useState(''),[joinOrigin,setJoinOrigin]=useState<View>('explore');
  const [casualPostOrigin,setCasualPostOrigin]=useState<View>('explore');
- const [casualIdeaIndex,setCasualIdeaIndex]=useState(0),[casualSelected,setCasualSelected]=useState<string[]>([]),[casualSuggestion,setCasualSuggestion]=useState(''),[casualExpanded,setCasualExpanded]=useState(true),[casualSpot,setCasualSpot]=useState('Tree-lined path'),[casualSpotDraft,setCasualSpotDraft]=useState('');
+ const [casualIdeaIndex,setCasualIdeaIndex]=useState(0),[casualSelected,setCasualSelected]=useState<string[]>([]),[casualSuggestion,setCasualSuggestion]=useState(''),[casualExpanded,setCasualExpanded]=useState(false),[casualSpot,setCasualSpot]=useState('Tree-lined path'),[casualSpotDraft,setCasualSpotDraft]=useState('');
  const [directMessages,setDirectMessages]=useState<Record<string,string[]>>({}),[directDraft,setDirectDraft]=useState('');
  const [moments,setMoments]=useState<Moment[]>(initialMoments),[likedMoments,setLikedMoments]=useState<number[]>([]),[momentText,setMomentText]=useState(''),[momentMode,setMomentMode]=useState('Nearby'),[momentWhen,setMomentWhen]=useState('Now'),[replyId,setReplyId]=useState(1),[replyText,setReplyText]=useState('');
  useLayoutEffect(()=>{if(view!=='assistant'||kind!=='activity')return;const root=appRef.current,scroller=root?.querySelector<HTMLElement>('.overlap-scroll .mobile-scroll'),composer=root?.querySelector<HTMLElement>('.idea-composer');if(!root||!scroller||!composer)return;
@@ -354,7 +354,7 @@ export default function Prototype(){
     ...(p.kind==='activity'?{casual:{...p.casual,planning:action==='Reflection'?false:p.casual?.planning}}:{}),
     messages:needsReply?[...p.messages,...replying.map(who=>({who,text}))]:p.messages};
   }));
-  setMealExpanded(state=>({...state,[planId]:false}));setCoffeeExpanded(state=>({...state,[planId]:false}));setCasualExpanded(true);
+  setMealExpanded(state=>({...state,[planId]:false}));setCoffeeExpanded(state=>({...state,[planId]:false}));setCasualExpanded(false);
   if(action==='Prepare'){openCoffeePrompts();return;}
   if(action==='Explore'){setCasualSelected(current.casual?.activities||[]);go('casual-ideas');return;}
   if(action==='Map'){setMapPanel(false);go('casual-map');return;}
@@ -366,7 +366,7 @@ export default function Prototype(){
  function markMealArrival(){setPlans(items=>items.map(p=>p.id!==planId||!p.meal?p:{...p,meal:{...p.meal,arrival:'here'},messages:[...p.messages,{who:'You',text:`I’m here at ${p.place}.` }]}));setToast('Your table knows you’re here.')}
  function updateMealFeedback(patch:Partial<MealProgress>){setPlans(items=>items.map(p=>p.id!==planId||!p.meal?p:{...p,meal:{...p.meal,...patch}}))}
  function submitMealFeedback(){if(!current.meal?.feeling)return;keyboard.hide();updateMealFeedback({note:current.meal.note?.trim()||'',feedbackSubmitted:true});setSheet('');setMealExpanded(state=>({...state,[planId]:false}));focusMealCard();setToast('Your private feedback is saved.')}
- function openPlan(id:number){setCasualExpanded(plans.find(p=>p.id===id)?.status!=='Pending');setPlanId(id);openDetail('thread')}
+ function openPlan(id:number){setCasualExpanded(false);setPlanId(id);openDetail('thread')}
 
  function publish(){keyboard.hide();if(!post.trim())return;if(postType==='Open Activity'&&(!activityTitle.trim()||!place.trim()||!activityTime)){setToast('Add a title, meeting point and time.');return}setPublished({text:post,type:postType});if(postType==='Open Activity')addPlan('activity');else setStage('published')}
  const current=plans.find(p=>p.id===planId)!;
@@ -455,34 +455,36 @@ export default function Prototype(){
   const steps=hasPlan?['Invite','Confirm','Plan','Meet','Reflect']:['Invite','Confirm','Meet','Reflect'];
   const stage=completed||c.arrived?'Reflect':planning?'Plan':confirmed?'Meet':'Confirm',active=steps.indexOf(stage);
   const allAgreed=activities.length>0&&(c.group?!!c.votesReady&&activities.some(t=>casualVoteCount(t)>=3):activities.every(t=>c.approved?.includes(t)&&(c.selfApproved||activities).includes(t)));
-  const facts=confirmed&&!planning&&casualExpanded&&(hasPlan||c.arrived);
+  const compactAdded=confirmed&&!planning&&hasPlan&&!c.arrived&&!casualExpanded;
+  const facts=confirmed&&!planning&&(c.arrived||casualExpanded&&hasPlan);
   const arrive=()=>{patchCasual({arrived:true},'I’m at the south gate.');setPlans(ps=>ps.map(p=>p.id!==planId?p:{...p,messages:[...p.messages,{who:p.people,text:'The light here is lovely. Let’s get a photo before we go.'}]}));};
   return <article className="casual-v3-plan meal-flow-card"><div className="meal-flow-top"><span>Casual plan</span><span className={'meal-flow-status'+(confirmed||completed?' is-confirmed':'')}>{closed?current.status:completed?'Completed':c.arrived?'Reflect':planning?'Planning':confirmed?'Confirmed':'Awaiting reply'}</span></div>
    <button className="sync-plan-heading" onClick={()=>setCasualExpanded(v=>!v)} aria-label={(casualExpanded?'Collapse':'Expand')+' casual plan details'} aria-expanded={casualExpanded}><h2>{current.title}</h2>{!c.arrived&&<img src="/casual/plan-chevron.svg" alt=""/>}</button>
    <div className="meal-stepper" style={{gridTemplateColumns:`repeat(${steps.length},minmax(0,1fr))`}} aria-label={'Casual progress: '+stage}>{steps.map((label,i)=><span key={label} aria-current={i===active?'step':undefined} className={'meal-step '+(i<active?'done':i===active?'current':'')}><i/>{label}</span>)}</div>
    {facts&&c.group&&!c.arrived&&<div className="casual-group-people"><Avatar name={name} photo={avatarPhoto}/><Avatar name="Alex Lin"/><Avatar name="Emma Park"/><small>You, Alex &amp; Emma</small></div>}
-   {facts?<div className="casual-plan-facts"><span><ClockIcon/>Today · {current.time.replace('After work · ','')}</span><span><SewingPinIcon/>{current.place}</span></div>:<p className="sync-meta">Today · {current.time.replace('After work · ','')} · {confirmed||completed?current.place:'Awaiting '+current.people.split(' ')[0]}</p>}
+   {!compactAdded&&(facts?<div className="casual-plan-facts"><span><ClockIcon/>Today · {current.time.replace('After work · ','')}</span><span><SewingPinIcon/>{current.place}</span></div>:<p className="sync-meta">Today · {current.time.replace('After work · ','')} · {confirmed||completed?current.place:'Awaiting '+current.people.split(' ')[0]}</p>)}
    {planning&&c.group&&casualVoteList()}
-   {planning?<Button disabled={!allAgreed} onClick={()=>{const agreed=c.group?activities.filter(t=>casualVoteCount(t)>=3):activities;patchCasual({planning:false,idea:agreed.join(' · ')});setPlans(ps=>ps.map(p=>p.id!==planId?p:{...p,messages:[...p.messages,{who:c.group?'You':p.people,text:c.group?'We all picked the photo stop — let’s do it.':'Sounds good — let’s add these to our walk.'}]}));setToast('Your shared plan is confirmed.')}}>Confirm plan</Button>:confirmed?<>
-    {c.idea&&!c.arrived&&(!casualExpanded||c.group)&&<div className="casual-added-plan"><small>Added to your plan</small><strong>{c.idea}</strong><small>{c.group?'Agreed by everyone':'Both agreed'} · After your walk</small></div>}
+   {planning?<Button disabled={!allAgreed} onClick={()=>{const agreed=c.group?activities.filter(t=>casualVoteCount(t)>=3):activities;patchCasual({planning:false,idea:agreed.join(' · ')});setCasualExpanded(false);setPlans(ps=>ps.map(p=>p.id!==planId?p:{...p,messages:[...p.messages,{who:c.group?'You':p.people,text:c.group?'We all picked the photo stop — let’s do it.':'Sounds good — let’s add these to our walk.'}]}));setToast('Your shared plan is confirmed.')}}>Confirm plan</Button>:confirmed?<>
+    {c.idea&&!c.arrived&&(!casualExpanded||c.group)&&<div className="casual-added-plan"><strong>{c.idea.split(' · ').map(t=>t==='A photo stop together'?'Photo stop':t==='A little tea break'?'Tea break':t).join(' · ')}</strong><small>{c.group?'Agreed by everyone':'Both agreed'} · After your walk</small></div>}
     {facts&&!c.group&&casualEntry(true)}
     {!c.arrived&&<Button onClick={arrive}>I’m here</Button>}
-    {casualExpanded&&!c.arrived&&!hasPlan&&casualEntry()}{casualExpanded&&(!facts||c.group)&&casualEntry(true)}
+    {compactAdded&&<p className="sync-meta">Today · {current.time.replace('After work · ','')} · {current.place}</p>}
+    {!c.arrived&&!hasPlan&&casualEntry()}{(!facts||c.group)&&casualEntry(true)}
     {c.arrived&&c.group&&<span className="casual-arrived-badge">You’re here</span>}
-    {c.arrived&&!casualExpanded&&<Button onClick={()=>go('casual-map')}>Open our map</Button>}
+
    </>:completed?<>{!c.photo&&<Button onClick={()=>{setMapPanel(false);go('casual-map')}}>Open our map</Button>}</>:null}
   {casualExpanded&&!c.arrived&&!['Cancelled','Declined','Expired','Completed'].includes(current.status)&&<button className="casual-cancel-action" onClick={()=>showSheet('cancel')}>{current.status==='Confirmed'?'Cancel plan':'Withdraw invitation'}</button>}
    {closed&&<p className="sync-meta">This invitation is closed.</p>}
   </article>
  }
  function casualThread(){const c=current.casual||{};return <section className="casual-v3-thread">{casualPlanCard()}
-  {c.planning&&!c.group&&c.activities?.map(title=>{const self=(c.selfApproved||c.activities||[]).includes(title),other=!!c.approved?.includes(title);return <button key={title} className="casual-agreement-card" aria-label={self?'Unconfirm '+title:'Confirm '+title} aria-pressed={self} onClick={()=>patchCasual({selfApproved:self?(c.selfApproved||c.activities||[]).filter(t=>t!==title):[...(c.selfApproved||[]),title]})}><strong>{title}</strong><div className="casual-agreement-row"><Avatar name={name} photo={avatarPhoto}/><span>{self?'✓':'○'}</span><Avatar name={current.people}/><span>{other?'✓':'○'}</span><small>{self&&other?'Both confirmed':!self?'Waiting for you':'Awaiting '+current.people.split(' ')[0]}</small></div></button>})}
+  {c.planning&&!c.group&&c.activities?.map(title=>{const self=(c.selfApproved||c.activities||[]).includes(title),other=!!c.approved?.includes(title);return <button key={title} className="casual-agreement-card" aria-label={self?'Unconfirm '+title:'Confirm '+title} aria-pressed={self} onClick={()=>patchCasual({selfApproved:self?(c.selfApproved||c.activities||[]).filter(t=>t!==title):[...(c.selfApproved||[]),title]})}><strong>{title}</strong><div className="casual-agreement-row"><Avatar name={name} photo={avatarPhoto}/><span>{self?'✓':'○'}</span><Avatar name={current.people}/><span>{other?'✓':'○'}</span><small>{self&&other?'Both confirmed':!self?'Waiting for you':'Waiting for '+current.people.split(' ')[0]}</small></div></button>})}
   {c.photo&&<article className="casual-shared-memory"><img src={c.photos?.[0]||'/casual/walk-figma.png'} alt="Our little photo stop"/><h2>Our little photo stop</h2><p>{casualSpot} · Today</p><div className="casual-memory-people"><Avatar name={name} photo={avatarPhoto}/><Avatar name={current.people}/><small>Saved to our map</small></div><button onClick={()=>{setMapPanel(false);go('casual-map')}}>View on our map<ArrowRightIcon/></button></article>}
   <div className="casual-v3-messages">{(c.planning?[]:current.messages).filter(m=>m.who!=='System').map((m,i)=><div className={m.who==='You'?'user-bubble':'other-bubble'} key={i}>{c.group&&m.who!=='You'&&<strong>{m.who}</strong>}{m.text}</div>)}</div>
  {current.status==='Completed'&&<button className="casual-feedback-link" onClick={()=>showSheet('casual-feedback')}>{c.feedbackSubmitted?'Edit feedback':'Write feedback'}</button>}
  </section>}
  function confirmCasualSelection(){
-  const revision=Date.now(),id=planId;patchCasual({activities:[...casualSelected],selfApproved:[...casualSelected],approved:[],planning:true,planningRevision:revision,votes:[...casualSelected],votesReady:false,responses:1});go('thread');
+  const revision=Date.now(),id=planId;setCasualExpanded(false);patchCasual({activities:[...casualSelected],selfApproved:[...casualSelected],approved:[],planning:true,planningRevision:revision,votes:[...casualSelected],votesReady:false,responses:1});go('thread');
   window.setTimeout(()=>setPlans(ps=>ps.map(p=>p.id===id&&p.status==='Confirmed'&&p.casual?.planning&&p.casual.planningRevision===revision&&p.casual.group?{...p,casual:{...p.casual,responses:2}}:p)),1300);
   window.setTimeout(()=>setPlans(ps=>ps.map(p=>{if(p.id!==id||p.status!=='Confirmed'||!p.casual?.planning||p.casual.planningRevision!==revision)return p;const c=p.casual,activities=c.activities||[],extra=c.group||activities.includes('A little tea break')?[]:['A little tea break'];return {...p,casual:{...c,activities:[...activities,...extra],approved:[...activities,...extra],votesReady:true}}})),2600);
  }
