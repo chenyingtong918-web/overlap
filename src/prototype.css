@@ -1862,3 +1862,12 @@
 .casual-agreement-row>span{width:18px;flex:none;margin:0;line-height:22px}
 .casual-added-plan small{min-height:22px;color:#193845}
 .casual-v3-ideas .casual-v3-linked button{display:flex;flex-direction:column;gap:4px}
+
+/* Local campus map: gestures move artwork, not the fixed place card. */
+.campus-map-viewport{position:absolute;inset:0;touch-action:none;cursor:grab;outline:none;user-select:none;overflow:hidden}
+.campus-map-viewport:active{cursor:grabbing}.campus-map-viewport:focus-visible{box-shadow:inset 0 0 0 2px #079fd4}
+.campus-map-world{position:absolute;inset:0;transform-origin:center;will-change:transform;background:#edf8fc}
+.campus-map-world:before{content:"";position:absolute;inset:-100%;background:#edf8fc;background-image:radial-gradient(ellipse at 25% 40%,#deeee6 0 9%,transparent 10%),radial-gradient(ellipse at 75% 70%,#e0eee7 0 12%,transparent 13%);background-size:400px 450px}
+.overlap-app .campus-map-detail{position:absolute;inset:0;width:390px;height:580px;pointer-events:none}
+.campus-map-controls{position:absolute;right:16px;top:90px;display:flex;flex-direction:column;align-items:center;background:#fff;border:1px solid #d5e8ee;border-radius:22px;box-shadow:0 4px 14px #19384512;overflow:hidden}
+.campus-map-controls button{width:40px;height:40px;display:grid;place-items:center;border:0;background:white;color:#193845;font:500 22px Poppins,sans-serif;cursor:pointer}.campus-map-controls button:disabled{color:#b7cbd2;cursor:default}.campus-map-controls output{font-size:9px;color:#526f7f;padding:2px 0}.campus-map-controls button:last-child{border-top:1px solid #edf4f7}.campus-map-help{position:absolute;left:24px;top:52px;font-size:10px;color:#526f7f;pointer-events:none}.our-map-count,.our-map-north{pointer-events:none}

@@ -78,3 +78,16 @@ for(const device of ['iPhone','Pixel 10'])test(`Casual join sheet and collapsed 
  await expect(page.locator('.casual-v3-thread>.casual-cancel-action')).toHaveCount(0);
  await page.getByRole('button',{name:'Collapse casual plan details',exact:true}).click();await expect(page.getByRole('button',{name:'Withdraw invitation',exact:true})).toHaveCount(0);
 });
+
+for(const device of ['iPhone','Pixel 10'])test(`Map pans, zooms, resets and retains place interaction on ${device}`,async({page})=>{
+ await start(page,device);await page.getByRole('button',{name:/Our map Our shared places/}).click();
+ const world=page.locator('.campus-map-world'),viewport=page.getByLabel('Interactive campus map',{exact:true});
+ await expect(page.locator('.campus-map-detail')).toHaveCSS('width','390px');
+ await page.getByRole('button',{name:'Zoom in',exact:true}).click();await expect(page.getByLabel('Map zoom',{exact:true})).toHaveText('125%');
+ const before=await world.getAttribute('style');const box=(await viewport.boundingBox())!;
+ await page.mouse.move(box.x+box.width*.3,box.y+box.height*.3);await page.mouse.down();await page.mouse.move(box.x+box.width*.3+40,box.y+box.height*.3+30,{steps:8});await page.mouse.up();
+ await expect(world).not.toHaveAttribute('style',before!);await expect(page.getByRole('button',{name:'Add our moment',exact:true})).toHaveCount(0);
+ await page.mouse.wheel(0,-150);await expect(page.getByLabel('Map zoom',{exact:true})).not.toHaveText('125%');
+ await page.getByRole('button',{name:'Reset map view',exact:true}).click();await expect(page.getByLabel('Map zoom',{exact:true})).toHaveText('100%');await expect(world).toHaveAttribute('style',/translate\(0px, 0px\) scale\(1\)/);
+ await page.getByRole('button',{name:'Add a shared place',exact:true}).click();await expect(page.getByRole('button',{name:'Add our moment',exact:true})).toBeVisible();
+});

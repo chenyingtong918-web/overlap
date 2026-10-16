@@ -69,3 +69,7 @@ Compared 6:2474, 6:2599, 6:2670 and 6:2876. Removed default exposed cancellation
 ## Casual Reflect entry
 
 Fixed mismatch between arrived/Reflect progress and Completed-only feedback visibility. Card now exposes Reflect upon arrival and feedback/edit on completion, reusing private feedback storage. Regression covers opening, saving and reopening on iPhone and Pixel.
+
+## Interactive shared campus map
+
+Added bounded pointer pan, anchored wheel/pinch zoom, 100–300% controls/reset and keyboard navigation. Map artwork/markers move together; controls and memory/place panel stay fixed. Added café/studio, dotted paths, creek label, trees and benches as a scoped vector overlay. Regression covers iPhone/Pixel zoom, pan, reset, drag click suppression and existing photo/caption flows.
