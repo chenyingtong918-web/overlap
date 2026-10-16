@@ -50,8 +50,8 @@ test('casual activities need shared approval before confirmation, then support p
 test('little-list discoveries unlock a voucher and remain saved on return',async({page})=>{
  await demo(page);await page.getByRole('button',{name:'Open profile',exact:true}).click();await page.getByRole('button',{name:/Save a conversation starter/}).click();
  await page.getByLabel('Your thought',{exact:true}).fill('How did you find your way into design?');await page.getByRole('button',{name:'Save my thought',exact:true}).click();
- await page.getByRole('button',{name:'Claim a little treat',exact:true}).click();await page.getByRole('button',{name:'Add to my vouchers',exact:true}).click();await expect(page.getByText('Ready to use',{exact:true})).toBeVisible();
- await page.getByRole('button',{name:'Back to my profile',exact:true}).click();await page.getByRole('button',{name:'Discoveries',exact:true}).click();await expect(page.getByRole('heading',{name:'How did you find your way into design?',exact:true})).toBeVisible();
+ await page.getByRole('button',{name:'Claim my treat',exact:true}).click();await expect(page.getByRole('heading',{name:'¥5 off your coffee',exact:true})).toBeVisible();
+ await page.getByRole('button',{name:'Go back',exact:true}).click();await page.getByRole('button',{name:'Discoveries',exact:true}).click();await expect(page.getByRole('heading',{name:'How did you find your way into design?',exact:true})).toBeVisible();
 });
 
 test('friend requests and private messages survive leaving Messages',async({page})=>{

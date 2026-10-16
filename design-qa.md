@@ -1,50 +1,29 @@
-# Coffee chat empty state and meeting — visual QA
+# Profile, messages and calendar — design QA
 
-Date: 2026-10-15
+Date: 2026-10-16
 
-Result: passed
+Result: passed (visual checks; see regression limitation below)
 
-## Reference
+## Source
 
-Figma file `Xm7eRTP53bgi4eeKJ1DLCG`, complete Coffee journey `4:955` on page `3:939`. High-fidelity design context and reference screenshots were obtained for C01 `4:1405`, D02 `4:1699`, D03 `4:1728`, D04 `4:1758` through the available Figma connection. This supersedes the earlier unavailable-file limitation.
+Figma file `Xm7eRTP53bgi4eeKJ1DLCG`, Section 1 `4:4255`. High-fidelity contexts and screenshots were used for profile/tasks `4:3943`, voucher `4:3731`, messages `4:3852`, friends `4:3780`, recommendations `4:3744`, phone lookup `4:3900`, QR `4:3925`, calendar `4:3998`, menu `4:4257`.
 
-## Visual checks
+## Restoration
 
-The 390×844 references were compared side by side with the app's existing 393×852 iPhone viewport. Final comparisons are saved locally at:
+Implemented the shared blue gradient, 40px header actions, 24px content inset, rounded white cards, task/reward grouping, full-page voucher, fixed three-tab people navigation, search field, message timestamps/unread badges, friend groups and recommended people. Phone lookup and QR have dedicated screens. The full Monday-first month calendar handles real dates, month lengths and selected-day clamping, and opens existing plan conversations. Cancelled/declined/expired plans are excluded. Pending plans retain their status rather than appearing confirmed.
 
-- `/private/tmp/overlap-coffee-qa/empty-final-compare.png`
-- `/private/tmp/overlap-coffee-qa/preflight-final-compare.png`
-- `/private/tmp/overlap-coffee-qa/room-final-compare.png`
-- `/private/tmp/overlap-coffee-qa/notes-final-compare.png`
+Existing profile data, dynamic cartoon avatars, human-message history and plan state remain connected. QR/phone lookup use local demo data; no real messages or friend requests are sent. Dates and native status chrome remain dynamic rather than copying stale dates from the design.
 
-Verified the 112×116 notebook frame and 28px exported pencil; original text and spacing; preflight title, 24px-radius photo, 52px mic/camera controls, preparation switch and full-width 48px Join action; connected header and hangup; video with 72×92 self preview; Start/Topics/Close rail and inline topic card; fixed bottom controls. Corrected inherited body color, an extra horizontal action inset and the old duplicate call header. The reference blue gradients are scoped to preparation and call screens.
+## Visual verification
 
-Device chrome/time remain runtime-owned. The extra eight device pixels are absorbed by flexible video height and bottom-safe positioning. Both iPhone and Pixel were checked for action/card clearance. No blocking in-scope visual differences remain.
+Checked iPhone and Pixel via the in-app browser. Fixed inherited button colors/font sizes and voucher validity contrast. No in-scope layout obstruction, horizontal overflow or missing image was observed. Runtime-owned device chrome remains unchanged. Final screenshots: `/private/tmp/overlap-hub-qa/profile.png`, `messages.png`, `friends.png`, `recommend.png`, `phone.png`, `qr.png`, `calendar.png`, `menu.png`, `voucher.png`, `messages-pixel.png`, `calendar-pixel.png`.
 
-## Assets
+Twenty original SVG exports in `public/hub` are nonempty and retain root dimensions (20px general icons, 16px menu icons, 14px/12px chevrons, 232px QR, 342.5×2 voucher divider). Assets are used in their corresponding design slots; no temporary Figma URLs are referenced in runtime code.
 
-Figma SVGs are stored in `public/coffee` at their natural root dimensions: pencil 28×28; mic/video/phone/notebook 20×20; bulb 19×19; switch 32×20. The notebook frame/rules are ordinary Figma layout rectangles, implemented as native layout. Figma photo downloads were hash-checked against `public/figma/video-self.png` and `video-person.png` and were byte-identical, so existing photos are reused without duplicate binaries. Asset slots and rendered geometry were inspected; no temporary remote asset URLs are used at runtime.
+## Verification and limitation
 
-## Interaction and regression
-
-- Preflight can open preparation and return to the preview; saved notes toggle on/off before joining.
-- A connected call has no duplicate detail header. Mic/camera controls retain their preflight choices. Camera-off hides only the self preview, leaving the other participant visible.
-- Notes toggle the inline card, retain the current topic across hide/show, advance through saved topic metadata and allow expanding full private notes. Empty preparation never invents saved notes.
-- End call returns the same plan to Reflect and its feedback action.
-- Targeted tests: 6 passed.
-- Full Playwright suite: 45 passed.
-- Build and protected runtime integrity: passed; all 28 protected files unchanged.
-- Sites packaging tests: 4 passed.
-- Browser console: no errors or warnings.
-
-## October 15 expanded note follow-up — D05
-
-Reference: file `Xm7eRTP53bgi4eeKJ1DLCG`, node `4:3672`. Read complete design context and its screenshot. Compared the 390×844 reference against the existing 393×852 app viewport in the browser. Proof: `/private/tmp/overlap-coffee-qa/expanded-final.png`.
-
-The expanded view now stays inside the call, uses a centered 156×156 remote video with no self overlay/name badge, and shows only the current topic in a white 24px-radius card. Verified photo y=174, card y=344, 16px padding, 12px vertical gaps, 16/24 title, 14/22 talking points/Ask/Share, and 36px Next. Fixed progress and call controls remain visible. Runtime device chrome and the extra 8px viewport height remain unchanged. Long notes scroll within the available body above controls.
-
-Verified expand/collapse, Next while expanded, topic identity after deselection, note hide/show, and Close/end-call transitions. iPhone and Pixel regression coverage checks centered square video, card/control clearance, current-topic-only content and absence of a modal. Browser console is clean.
-
-Build/runtime integrity passed (28 protected files unchanged). Full Playwright suite: 45 passed. Sites tests: 4 passed.
-
-Result: passed
+- `npm run build`: passed, including all 28 protected runtime files.
+- `npm run test:sites`: 4 passed.
+- New hub tests: 4 passed; message search/read state, phone validation/request state, month rollover and pending plan navigation, QR and fixed tabs on both devices.
+- Latest full suite: 48 passed, 1 failed in the pre-existing isolated runtime keyboard/footer drag test. That test passed in the earlier full run, but continued failing in isolated retries. A trial stability wait did not resolve it and was reverted. No protected runtime changes or test weakening were retained. All tests for the requested pages passed.
+- `git diff --check`: passed.
