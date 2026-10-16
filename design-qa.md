@@ -53,3 +53,7 @@ Verification:
 Compared Figma 4:3943 and 4:3731 with the local demo. Removed Profile bottom legacy menu and Log out; settings remain in the header. Removed obsolete voucher screen/sheet so claiming and revisiting use the same redemption card. Removed the extra profile minimum-height spacer and matched voucher metadata color. Existing cartoon avatar and relative validity date remain dynamic.
 
 Verified Profile saved-task state and voucher visually in the browser; task edit, claim, return and reopen regression passes. Build and protected-runtime integrity pass; Profile hub + Figma journeys: 14 passed; Sites packaging: 4 passed. Screenshots: /private/tmp/profile-clean-preview.png and /private/tmp/voucher-updated-preview.png.
+
+## October 16 — Menu panel fidelity
+
+Figma 4:4257: corrected nested content padding, 20/28 title, 372px panel, white surface, handle, 24px gutters, 56px rows, 50px action and 38px bottom clearance. Scoped overlay z27/panel z28 covers the app header. Existing exported menu SVGs remain natural-sized: 16px row icons, 14px chevrons, 20px close. iPhone and Pixel geometry, no-scroll, asset geometry, dismissal and My plans navigation tests pass (6 Profile hub tests). Build and 28-file protected runtime check pass. Browser proof: /private/tmp/menu-figma-preview.png.

@@ -51,3 +51,17 @@ for(const device of ['iPhone','Pixel 10'])test(`${device}: QR action clears devi
  expect(await page.locator('.sync-fixed-actions').evaluate(el=>el.closest('.mobile-scroll')===null)).toBe(true);
  await page.getByRole('button',{name:'Scan a friend’s code',exact:true}).click();await expect(page.getByText('Code recognized · View profile')).toBeVisible();
 });
+
+for(const device of ['iPhone','Pixel 10'])test(`${device}: menu matches Figma spacing without nested scrolling`,async({page})=>{
+ await demo(page);if(device==='Pixel 10'){await page.getByRole('button',{name:'Preview device: iPhone'}).click();await page.getByText('Pixel 10',{exact:true}).click();}
+ await page.getByRole('button',{name:'Open menu',exact:true}).click();
+ const panel=page.getByRole('dialog',{name:'Menu',exact:true});
+ await expect(panel).toBeVisible();
+ expect(await panel.evaluate(el=>el.clientHeight)).toBe(372);
+ expect(await panel.locator('.sheet-content').evaluateAll(els=>els.every(el=>el.scrollHeight<=el.clientHeight))).toBe(true);
+ expect(await panel.locator('.sheet-title').evaluate(el=>getComputedStyle(el).fontSize)).toBe('20px');
+ expect(await panel.locator('.menu-item').evaluateAll(els=>els.every(el=>el.offsetHeight===56))).toBe(true);
+ expect(await panel.locator('img').evaluateAll(els=>els.every(el=>(el as HTMLImageElement).naturalWidth===el.clientWidth))).toBe(true);
+ await page.getByRole('button',{name:'Close sheet',exact:true}).click();await expect(panel).toHaveCount(0);
+ await page.getByRole('button',{name:'Open menu',exact:true}).click();await page.getByRole('button',{name:'My plans',exact:true}).click();await expect(page.locator('.hub-calendar')).toBeVisible();
+});

@@ -1756,13 +1756,21 @@
 .hub-screen .sync-fixed-actions .button{width:100%}
 .hub-screen .sync-fixed-actions:before{display:none}
 .hub-empty{font:400 14px/22px Poppins,sans-serif;text-align:center;padding:20px}
-.bottom-sheet:has(.hub-menu-list){background:#fff;border:0;backdrop-filter:none;border-radius:32px 32px 0 0}
-.bottom-sheet:has(.hub-menu-list) .sync-sheet-close{top:23px;right:25px;width:40px;height:40px;border:0;background:#fff}
-.hub-menu-list{gap:8px;padding-top:0}
-.hub-menu-list .menu-item{height:56px;min-height:56px;background:#fff;border:1px solid #d9eaf2;padding:10px 12px;box-shadow:none}
-.hub-menu-list .menu-item-icon{background:#edf8fc}
-.hub-menu-list .hub-menu-chevron{margin-left:auto;display:block}
-.hub-menu-list>.button{margin-top:8px;background:#193845;border:0;box-shadow:none}
+.sheet-overlay:has(+ .bottom-sheet .hub-menu-list){z-index:27;background:rgba(26,56,69,.28);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.bottom-sheet.bottom-sheet:has(.hub-menu-list){z-index:28;background:#fff!important;border:0;backdrop-filter:none;-webkit-backdrop-filter:none;border-radius:32px 32px 0 0;box-shadow:0 5px 18px #1f384d0d}
+.bottom-sheet:has(.hub-menu-list) .sheet-handle-zone{height:30px;flex:none;align-items:start;padding-top:12px}
+.bottom-sheet:has(.hub-menu-list) .sheet-handle{width:40px;height:4px;border-radius:2px;background:#526f7f}
+.bottom-sheet:has(.hub-menu-list) .sheet-header{padding:10px 80px 16px 24px;flex:none}
+.bottom-sheet:has(.hub-menu-list) .sheet-title{font:500 20px/28px Poppins,sans-serif;letter-spacing:0;color:#193845}
+.bottom-sheet:has(.hub-menu-list)>.sheet-content{padding:0 24px 38px;min-height:0}
+.bottom-sheet:has(.hub-menu-list)>.sheet-content>.sheet-content{padding:0;overflow:visible}
+.bottom-sheet:has(.hub-menu-list) .sync-sheet-close{top:24px;right:24px;width:40px;height:40px;padding:0;border:0;background:#fff}
+.hub-menu-list{gap:8px;padding:0}
+.hub-menu-list .menu-item{height:56px;min-height:56px;background:#fff;border:1px solid #d9eaf2;padding:10px 12px;box-shadow:none;border-radius:16px;gap:12px;font:400 14px/22px Poppins,sans-serif;color:#193845}
+.hub-menu-list .menu-item-icon{width:34px;height:34px;border-radius:12px;background:#edf8fc}
+.hub-menu-list img{display:block;flex:none}
+.hub-menu-list .hub-menu-chevron{margin-left:auto}
+.hub-menu-list>.button{height:50px;min-height:50px;margin:8px 0 0;border-radius:24px;padding:0 20px;background:#193845;color:#fff;border:0;box-shadow:none;font:500 14px/20px Poppins,sans-serif!important}
 
 /* Casual journey — Xm7eRTP53bgi4eeKJ1DLCG / 6:2308. */
 .casual-screen{background:radial-gradient(ellipse 127.28% 130.1% at 90% 8%,#b7e9ff 0%,#b7e9ff00 46%),radial-gradient(ellipse 134.35% 82.02% at 5% 42%,#e1edff 0%,#e1edff00 48%),linear-gradient(180deg,#92d8fb 0%,#e7f4fb 44%,#f4f8fc 100%)}
