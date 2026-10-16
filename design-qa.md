@@ -27,3 +27,23 @@ Twenty original SVG exports in `public/hub` are nonempty and retain root dimensi
 - New hub tests: 4 passed; message search/read state, phone validation/request state, month rollover and pending plan navigation, QR and fixed tabs on both devices.
 - Latest full suite: 48 passed, 1 failed in the pre-existing isolated runtime keyboard/footer drag test. That test passed in the earlier full run, but continued failing in isolated retries. A trial stability wait did not resolve it and was reverted. No protected runtime changes or test weakening were retained. All tests for the requested pages passed.
 - `git diff --check`: passed.
+
+## 2026-10-16 — Casual plan, current booklet design
+
+Reference: file `Xm7eRTP53bgi4eeKJ1DLCG`, board `6:2308`. Inspected child design contexts and screenshots for discovery/details, invitation, confirmation, detour deck, shared approvals, group selection/votes, arrival, map, camera/review, photo sharing, and completion.
+
+Implemented:
+- Discovery/detail type scale, photo sizing, and safe-area Ask to join; pending requests keep the waiting card without a composer.
+- Photo recommendation at 368px; text alternatives at 318px; paired avatars and the correct recommendation rationale; pagination follows the active card height.
+- Pale agreement cards, proper circular group choices, 1/2/3-person response states, and unanimous activities only in the confirmed plan.
+- Added-plan summary versus expanded meeting facts; arrival shows Reflect and keeps Our map available. Private feedback remains reachable via the external Reflection control.
+- Just added, map memory summary, and expanded memory sheet as separate states; 176px sheet photo, 442px sheet height, editable captions and multiple stored photos. A photo saved after arrival completes the walk.
+- Reused byte-identical Figma walk image (SHA-256 `f5e29ff7c8d9d9169b2cc59041f577f74c02eefef48c6e8eb28405890f870b09`) and existing map/icon exports; retained dynamic cartoon avatars and live device status chrome.
+
+Verification:
+- `npm run build`: passed; all 28 protected runtime files unchanged. Existing bundle-size advisory remains.
+- `npm run test:sites`: 4 passed.
+- Full Playwright run: 50 passed, 1 failed. The existing `mobile-runtime.spec.ts:100` keyboard/footer dismissal test still fails waiting for `data-visible=false`; it is unrelated to the app-level Casual changes and was also documented before this revision.
+- Final affected-flow run (Casual fidelity, demo navigation, Figma journeys, plan controls): 21 passed. Includes iPhone and Pixel, correct circular option geometry, 3/2/1 group vote totals, preventing non-unanimous additions, arrival progression, multiple photos, caption persistence, and memory reopening.
+- Visual inspection in the in-app browser: confirmed plan, both recommendation forms, approvals, arrival, group options, photo review, new-place map, and expanded memory. Group selection proof saved at `/private/tmp/casual-options-preview.png`; automated screenshots are in test-results.
+- Delivery: independent branch `codex/casual-plan-figma`, based on `ad08a95`. This request does not change production/main.

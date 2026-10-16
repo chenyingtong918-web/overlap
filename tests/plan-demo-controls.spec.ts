@@ -29,7 +29,7 @@ test('Casual controls jump across current plan, exploration, map and private ref
  await expect(controls(page).getByRole('button')).toHaveText(['Confirm','Reflection','Explore','Map']);
  await controls(page).getByRole('button',{name:'Confirm',exact:true}).click();await expect(page.getByLabel('Casual progress: Meet')).toBeVisible();
  await expect(page.locator('.casual-v3-messages .other-bubble')).toHaveCount(1);
- await page.getByRole('button',{name:'I’m here',exact:true}).click();await expect(page.getByLabel('Casual progress: Meet')).toBeVisible();
+ await page.getByRole('button',{name:'I’m here',exact:true}).click();await expect(page.getByLabel('Casual progress: Reflect')).toBeVisible();
  await controls(page).getByRole('button',{name:'Explore',exact:true}).click();await expect(page.getByLabel('Ideas for your walk')).toBeVisible();
  await controls(page).getByRole('button',{name:'Map',exact:true}).click();await expect(page.getByLabel('Our shared map')).toBeVisible();await page.getByLabel('Add a shared place',{exact:true}).click();
  await page.getByRole('button',{name:'Add our moment',exact:true}).click();await page.getByRole('button',{name:'Take photo',exact:true}).click();await page.getByRole('button',{name:'Add to our map',exact:true}).click();
