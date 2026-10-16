@@ -232,3 +232,5 @@ When any text-entry control loses focus, dismiss the simulated keyboard. If the 
 - Casual Reflect entry must be inside the plan card as soon as arrival advances the progress to Reflect, including before Completed. Open existing private feedback; preserve saved feedback and offer Edit feedback afterward. Never strand reflection below the message history.
 
 - Campus shared map supports bounded drag, 100–300% zoom, wheel/pinch, accessible zoom/reset controls and keyboard arrows/Home. Transform artwork and markers together while the place card stays fixed. Keep local campus styling, exported base map, per-plan photos and click suppression after dragging; no external map/geolocation dependency.
+
+- Casual photo flow uses the exact image exported from Figma 12:5435 at public/casual/shared-walk.png for capture and subsequent photo/memory previews. Keep the caption visible above both the keyboard and app-owned fixed action: reserve footer clearance and reveal it on keyboard resize without editing protected runtime.

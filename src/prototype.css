@@ -1871,3 +1871,6 @@
 .overlap-app .campus-map-detail{position:absolute;inset:0;width:390px;height:580px;pointer-events:none}
 .campus-map-controls{position:absolute;right:16px;top:90px;display:flex;flex-direction:column;align-items:center;background:#fff;border:1px solid #d5e8ee;border-radius:22px;box-shadow:0 4px 14px #19384512;overflow:hidden}
 .campus-map-controls button{width:40px;height:40px;display:grid;place-items:center;border:0;background:white;color:#193845;font:500 22px Poppins,sans-serif;cursor:pointer}.campus-map-controls button:disabled{color:#b7cbd2;cursor:default}.campus-map-controls output{font-size:9px;color:#526f7f;padding:2px 0}.campus-map-controls button:last-child{border-top:1px solid #edf4f7}.campus-map-help{position:absolute;left:24px;top:52px;font-size:10px;color:#526f7f;pointer-events:none}.our-map-count,.our-map-north{pointer-events:none}
+
+/* Reserve the app-owned photo footer when revealing the caption above the keyboard. */
+.casual-review-screen .casual-moment-review{padding-bottom:150px}

@@ -73,3 +73,7 @@ Fixed mismatch between arrived/Reflect progress and Completed-only feedback visi
 ## Interactive shared campus map
 
 Added bounded pointer pan, anchored wheel/pinch zoom, 100–300% controls/reset and keyboard navigation. Map artwork/markers move together; controls and memory/place panel stay fixed. Added café/studio, dotted paths, creek label, trees and benches as a scoped vector overlay. Regression covers iPhone/Pixel zoom, pan, reset, drag click suppression and existing photo/caption flows.
+
+## Casual shared photo and caption keyboard fix
+
+Downloaded original 1536×1024 PNG from 12:5435; verified portrait object-cover capture and subsequent attachments. Added app-scoped keyboard resize reveal and fixed-footer clearance; keyboard-open caption and submit remain visible, with privacy text returning after dismissal. Build/runtime pass. Two iPhone/Pixel photo regressions pass including caption bounds above footer, multiple attachments, saved text and memory reopening. Browser proof: /private/tmp/overlap-caption-visible.png.

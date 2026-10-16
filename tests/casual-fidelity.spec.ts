@@ -11,7 +11,11 @@ for(const device of ['iPhone','Pixel 10'])test(`Casual stores multiple photos an
  await expect(page.getByRole('button',{name:'Cancel plan',exact:true})).toHaveCount(0);await expect(page.getByRole('button',{name:'I’m here',exact:true})).toBeVisible();await expect(page.getByRole('button',{name:/Explore together More ideas/})).toBeVisible();
  await page.getByRole('button',{name:'Expand casual plan details'}).click();await page.getByRole('button',{name:/Our map Our shared places/}).click();await page.getByLabel('Add a shared place',{exact:true}).click();await page.getByRole('button',{name:'Add our moment',exact:true}).click();
  await expect(page.getByRole('button',{name:'Take photo',exact:true})).toBeInViewport();await page.getByRole('button',{name:'Take photo',exact:true}).click();
- await page.getByLabel('Moment caption',{exact:true}).fill('The light made us stop. Glad we took the long way home.');await page.getByRole('button',{name:'Add photo',exact:true}).click();
+ await expect(page.locator('.casual-review-photo')).toHaveAttribute('src','/casual/shared-walk.png');
+ await page.getByLabel('Moment caption',{exact:true}).fill('The light made us stop. Glad we took the long way home.');
+ await expect(page.getByTestId('keyboard-dock')).toHaveAttribute('data-visible','true');
+ await expect.poll(async()=>{const field=await page.getByLabel('Moment caption',{exact:true}).boundingBox(),footer=await page.locator('.sync-fixed-actions').boundingBox(),scroll=await page.locator('.overlap-scroll .mobile-scroll').boundingBox();return !!field&&!!footer&&!!scroll&&field.y>=scroll.y&&field.y+field.height<=footer.y;}).toBe(true);
+await page.getByRole('button',{name:'Add photo',exact:true}).click();
  await page.getByRole('button',{name:'Take photo',exact:true}).click();await expect(page.getByLabel('Moment caption',{exact:true})).toHaveValue('The light made us stop. Glad we took the long way home.');
  await expect(page.locator('.casual-attachments img')).toHaveCount(2);await page.getByRole('button',{name:'Remove photo 2',exact:true}).click();await expect(page.locator('.casual-attachments img')).toHaveCount(1);
  await page.getByRole('button',{name:'Add photo',exact:true}).click();await page.getByRole('button',{name:'Take photo',exact:true}).click();
