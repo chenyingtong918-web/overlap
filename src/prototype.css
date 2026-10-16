@@ -1874,3 +1874,5 @@
 
 /* Reserve the app-owned photo footer when revealing the caption above the keyboard. */
 .casual-review-screen .casual-moment-review{padding-bottom:150px}
+
+.hub-add-friend-options{display:flex;gap:12px;margin-top:20px}.hub-add-friend-options .button{flex:1;font-size:12px;margin:0}

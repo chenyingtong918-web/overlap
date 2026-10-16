@@ -4,6 +4,7 @@ async function menu(page:Page,name:string){await page.getByRole('button',{name:'
 
 test('messages search, unread state and friend lookup stay connected',async({page})=>{
  await demo(page);await menu(page,'Messages');
+ await expect(page.locator('.hub-conversations')).toHaveCount(1);
  await expect(page.locator('.hub-message-time i')).toHaveText('2');
  await page.getByLabel('Search messages',{exact:true}).fill('example');
  await expect(page.locator('.hub-message-row')).toHaveCount(1);
@@ -13,7 +14,7 @@ test('messages search, unread state and friend lookup stay connected',async({pag
  await page.getByLabel('Search messages',{exact:true}).fill('');
  await page.getByRole('button',{name:'Friends',exact:true}).click();
  await page.getByRole('button',{name:'Add friends',exact:true}).click();
- await page.getByRole('button',{name:'Find by phone number',exact:true}).click();
+ await expect(page.getByRole('dialog')).toHaveCount(0);
  await expect(page.getByRole('button',{name:'Find person',exact:true})).toBeDisabled();
  await page.getByLabel('Friend phone number').fill('138 0000 1234');
  await page.getByRole('button',{name:'Find person',exact:true}).click();
@@ -44,7 +45,7 @@ for(const device of ['iPhone','Pixel 10'])test(`${device}: QR action clears devi
  await demo(page);if(device==='Pixel 10'){await page.getByRole('button',{name:'Preview device: iPhone'}).click();await page.getByText('Pixel 10',{exact:true}).click();}
  await menu(page,'Messages');
  expect(await page.locator('.hub-tabs').evaluate(el=>el.closest('.mobile-scroll')===null)).toBe(true);
- await page.getByRole('button',{name:'New message',exact:true}).click();await page.getByRole('button',{name:'My QR code',exact:true}).click();
+ await page.getByRole('button',{name:'Add friends',exact:true}).click();await page.getByRole('button',{name:'My QR code',exact:true}).click();
  await expect(page.locator('.hub-qr-card img')).toHaveJSProperty('naturalWidth',232);
  expect(await page.locator('.hub-qr-card img').evaluate(el=>Math.round(el.getBoundingClientRect().width)/Math.round(el.getBoundingClientRect().height))).toBe(1);
  expect(await page.locator('.content').evaluate(el=>el.scrollWidth<=el.clientWidth+1)).toBe(true);

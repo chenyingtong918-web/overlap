@@ -236,3 +236,5 @@ When any text-entry control loses focus, dismiss the simulated keyboard. If the 
 - Casual photo flow uses the exact image exported from Figma 12:5435 at public/casual/shared-walk.png for capture and subsequent photo/memory previews. Keep the caption visible above both the keyboard and app-owned fixed action: reserve footer clearance and reveal it on keyboard resize without editing protected runtime.
 
 - Menu includes My voucher after Saved posts, using a 16px ticket icon. Increase sheet height to 436px for four rows; retain existing row spacing and bottom action. Open the existing voucher screen and return to the originating screen.
+
+- Messages header uses a plus/Add friends action in every tab. It opens the full phone lookup page directly, with QR scan and own QR options on that page; remove the intermediate action sheet. Render sample and plan conversations in one continuous white list, preserving their existing destinations and search.

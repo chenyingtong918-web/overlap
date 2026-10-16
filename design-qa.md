@@ -81,3 +81,7 @@ Downloaded original 1536×1024 PNG from 12:5435; verified portrait object-cover 
 ## Menu voucher entry
 
 Added My voucher after Saved posts with 16px ticket icon, existing voucher destination and origin-aware back navigation. Sheet grows to 436px so all four rows and New conversation remain visible.
+
+## Messages simplification
+
+Replaced compose pencil with Add friends plus, directly opens full-page phone lookup with QR alternatives. Merged sample and plan conversations into one card with continuous row dividers; preserved search and conversation targets.
