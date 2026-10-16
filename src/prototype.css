@@ -1644,7 +1644,7 @@
 .hub-identity>div{display:grid;gap:4px;min-width:0;flex:1}
 .hub-identity strong{font:500 14px/22px Poppins,sans-serif;color:#193845}
 .hub-profile{display:flex;flex-direction:column;gap:24px}
-.hub-profile-main{display:flex;flex-direction:column;gap:24px;min-height:700px}
+.hub-profile-main{display:flex;flex-direction:column;gap:24px}
 .hub-profile-card{display:flex;flex-direction:column;gap:12px;padding:20px;background:#fff;border-radius:24px;box-shadow:0 5px 18px #1f384d0d}
 .hub-profile-card .avatar{width:52px;height:52px;min-width:52px}
 .hub-profile h2{font:500 20px/28px Poppins,sans-serif}
@@ -1671,7 +1671,7 @@
 .hub-voucher-code{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;height:90px;padding:16px;background:#193845}
 .hub-voucher-code>img{position:absolute;top:-1px;left:50%;transform:translateX(-50%);display:block}
 .hub-voucher-code>strong{font:500 24px/32px Poppins,sans-serif;color:#fff}
-.hub-voucher-code>small{font-weight:400;color:#b6ccd6}
+.hub-voucher-code>small{font-weight:400;color:#526f7f}
 .hub-voucher>p{font:400 14px/22px Poppins,sans-serif;color:#526f7f;text-align:center}
 .hub-calendar{display:flex;flex-direction:column;gap:16px}
 .hub-month{display:flex;flex-direction:column;gap:12px;background:#fff;border-radius:24px;padding:16px}

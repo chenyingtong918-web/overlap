@@ -47,3 +47,9 @@ Verification:
 - Final affected-flow run (Casual fidelity, demo navigation, Figma journeys, plan controls): 21 passed. Includes iPhone and Pixel, correct circular option geometry, 3/2/1 group vote totals, preventing non-unanimous additions, arrival progression, multiple photos, caption persistence, and memory reopening.
 - Visual inspection in the in-app browser: confirmed plan, both recommendation forms, approvals, arrival, group options, photo review, new-place map, and expanded memory. Group selection proof saved at `/private/tmp/casual-options-preview.png`; automated screenshots are in test-results.
 - Delivery: independent branch `codex/casual-plan-figma`, based on `ad08a95`. This request does not change production/main.
+
+## October 16 — Profile and voucher route correction
+
+Compared Figma 4:3943 and 4:3731 with the local demo. Removed Profile bottom legacy menu and Log out; settings remain in the header. Removed obsolete voucher screen/sheet so claiming and revisiting use the same redemption card. Removed the extra profile minimum-height spacer and matched voucher metadata color. Existing cartoon avatar and relative validity date remain dynamic.
+
+Verified Profile saved-task state and voucher visually in the browser; task edit, claim, return and reopen regression passes. Build and protected-runtime integrity pass; Profile hub + Figma journeys: 14 passed; Sites packaging: 4 passed. Screenshots: /private/tmp/profile-clean-preview.png and /private/tmp/voucher-updated-preview.png.
