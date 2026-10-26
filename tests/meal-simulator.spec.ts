@@ -39,6 +39,6 @@ test('one click confirms the same invitation and cannot append duplicate replies
 test('withdrawing hides mock acceptance and never reopens the invitation',async({page})=>{
  await pendingMeal(page);await page.getByRole('button',{name:'Expand lunch plan details',exact:true}).click();
  await page.getByRole('button',{name:'Withdraw invitation',exact:true}).click();await page.getByRole('dialog').getByRole('button',{name:'Withdraw invitation',exact:true}).click();
- await expect(page.locator('.meal-flow-status')).toHaveText('Cancelled');await expect(page.getByRole('button',{name:'Confirm',exact:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Reflection',exact:true})).toBeDisabled();
+ await expect(page.locator('.meal-flow-status')).toHaveText('Cancelled');await expect(page.getByRole('button',{name:'Confirm',exact:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Completed',exact:true})).toBeDisabled();
  await page.waitForTimeout(4800);await expect(page.locator('.meal-flow-status')).toHaveText('Cancelled');await expect(page.locator('.meal-thread-messages .other-bubble')).toHaveCount(0);
 });

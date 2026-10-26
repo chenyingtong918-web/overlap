@@ -28,7 +28,7 @@ for(const device of ['iPhone','Pixel 10'])test(`coffee preflight and in-call not
  await page.getByRole('button',{name:'Collapse note',exact:true}).click();await expect(page.getByLabel('Your current chat note')).toContainText('A first step in my role');
  await page.getByRole('button',{name:'Expand note',exact:true}).click();
  await page.getByRole('button',{name:'Next',exact:true}).click();await expect(page.getByLabel('Your current chat note')).toContainText('One thing I’ll take from today is');await expect(page.locator('.coffee-note-points')).toHaveCount(0);await page.getByRole('button',{name:'Collapse note',exact:true}).click();
- await page.getByRole('button',{name:'End call',exact:true}).click();await expect(page.getByRole('button',{name:'Write feedback',exact:true})).toBeVisible();
+ await page.getByRole('button',{name:'End call',exact:true}).click();await expect(page.getByRole('button',{name:'Jot something down',exact:true})).toBeVisible();
 });
 test('a coffee call without preparation has no invented notes and can still toggle its notes view',async({page})=>{
  await openCoffee(page);await page.getByRole('button',{name:'Join chat',exact:true}).click();await expect(page.getByRole('switch',{name:'Use preparation notes'})).toBeDisabled();await page.getByRole('button',{name:'Join chat',exact:true}).click();

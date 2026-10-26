@@ -21,7 +21,7 @@ await page.getByRole('button',{name:'Add photo',exact:true}).click();
  await page.getByRole('button',{name:'Add photo',exact:true}).click();await page.getByRole('button',{name:'Take photo',exact:true}).click();
  await expect(page.getByRole('button',{name:'Add to our map',exact:true})).toBeInViewport();await page.getByRole('button',{name:'Add to our map',exact:true}).click();
  await expect(page.getByText('3 places lit up',{exact:true})).toBeVisible();await expect(page.getByText('A new place, together',{exact:true})).toBeVisible();await page.getByRole('button',{name:'View our map',exact:true}).click();await page.getByRole('button',{name:'Open this memory',exact:true}).click();await expect(page.locator('.casual-memory-full img')).toHaveCount(2);await expect(page.getByRole('dialog')).toContainText('The light made us stop.');await page.getByRole('button',{name:'Close sheet',exact:true}).click();
- await page.getByRole('complementary',{name:'Plan demo controls'}).getByRole('button',{name:'Reflection',exact:true}).click();await expect(page.getByText('Our little photo stop',{exact:true})).toBeVisible();
+ await page.getByRole('complementary',{name:'Plan demo controls'}).getByRole('button',{name:'Completed',exact:true}).click();await expect(page.getByText('Our little photo stop',{exact:true})).toBeVisible();
  await page.getByRole('button',{name:'View on our map',exact:true}).click();await page.getByLabel('Open tree-lined path memory',{exact:true}).click();await expect(page.getByRole('dialog')).toContainText('The light made us stop.');
  await page.getByRole('button',{name:'Close sheet',exact:true}).click();await page.mouse.move(0,0);await page.screenshot({path:`test-results/casual-memory-${device.replace(' ','-')}.png`});
 });
@@ -35,20 +35,22 @@ test('Casual deck retains choices across pages and requires both people for each
  await page.getByRole('button',{name:'Confirm A photo stop together',exact:true}).click();await page.getByRole('button',{name:'Confirm plan',exact:true}).click();await expect(page.getByLabel('Casual progress: Meet')).toBeVisible();await expect(page.getByRole('button',{name:'Expand casual plan details',exact:true})).toBeVisible();await expect(page.locator('.casual-added-plan')).toContainText('Tea break');
 });
 
-for(const device of ['iPhone','Pixel 10'])test(`Casual arrival uses Reflect and the meeting facts on ${device}`,async({page})=>{
+for(const device of ['iPhone','Pixel 10'])test(`Casual arrival stays at Meet and completion needs no photo on ${device}`,async({page})=>{
  await start(page,device);
  await page.getByRole('button',{name:'I’m here',exact:true}).click();
- await expect(page.getByLabel('Casual progress: Reflect')).toBeVisible();
- await expect(page.locator('.meal-flow-status')).toHaveText('Reflect');
+ await expect(page.getByLabel('Casual progress: Meet')).toBeVisible();
+ await expect(page.locator('.meal-flow-status')).toHaveText('Together');
  await expect(page.locator('.casual-plan-facts')).toContainText('Campus A south gate');
  await expect(page.getByRole('button',{name:'I’m here',exact:true})).toHaveCount(0);
  await expect(page.getByRole('button',{name:/Our map Our shared places/})).toBeVisible();
  await expect(page.locator('.casual-v3-messages')).toContainText('I’m at the south gate.');
- await page.mouse.move(0,0);await page.screenshot({path:`test-results/casual-arrival-${device.replace(' ','-')}.png`});
- await page.locator('.casual-v3-plan').getByRole('button',{name:'Reflect',exact:true}).click();
- await expect(page.getByText('Private reflection',{exact:true})).toBeVisible();
- await page.getByRole('button',{name:'Great',exact:true}).click();await page.getByRole('button',{name:'Save feedback',exact:true}).click();
- await page.locator('.casual-v3-plan').getByRole('button',{name:'Edit feedback',exact:true}).click();await expect(page.getByRole('button',{name:'Great',exact:true})).toHaveClass(/selected/);
+ await expect(page.getByRole('button',{name:'Add a private note',exact:true})).toHaveCount(0);
+ await page.getByRole('button',{name:'Finish walk',exact:true}).click();
+ await expect(page.getByLabel('Casual progress: Completed')).toBeVisible();
+ await expect(page.getByRole('button',{name:/Add a private note|Record something|Your note/})).toHaveCount(0);
+ await page.getByRole('button',{name:/Our map Our shared places/}).click();
+ await expect(page.getByLabel('Our shared map')).toBeVisible();
+ await expect(page.getByLabel('Add a shared place',{exact:true})).toBeVisible();
 });
 
 for(const device of ['iPhone','Pixel 10'])test(`Group options and unanimous result remain usable on ${device}`,async({page})=>{

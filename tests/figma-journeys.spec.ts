@@ -24,15 +24,31 @@ test('coffee notes are selected, edited, saved, and available during a demo call
  await expect(page.getByLabel('Your current chat note')).toBeVisible();await page.getByRole('button',{name:'Expand note',exact:true}).click();await expect(page.getByRole('button',{name:'Collapse note',exact:true})).toBeVisible();
  await expect(page.getByLabel('Your current chat note')).toContainText('Was there a moment when product started to feel right?');await expect(page.getByText('Her first product responsibility',{exact:true})).toBeVisible();
  await page.getByRole('button',{name:'Collapse note',exact:true}).click();await page.getByRole('button',{name:'End call',exact:true}).click();
- await expect(page.getByRole('button',{name:/Write feedback/})).toBeVisible();
+ await page.getByRole('button',{name:'Jot something down',exact:true}).click();
+ await expect(page.getByRole('heading',{name:'A note from your chat',exact:true})).toBeVisible();
+ await expect(page.getByRole('button',{name:'Save note',exact:true})).toBeDisabled();
+ await expect(page.getByRole('button',{name:'Not now',exact:true})).toHaveCount(0);
+ await page.getByLabel('Private note',{exact:true}).fill('An idea to try next time.');await page.getByRole('button',{name:'Save note',exact:true}).click();
+ await expect(page.locator('.human-messages')).not.toContainText('An idea to try next time.');
+ await page.getByRole('button',{name:'Your note',exact:true}).click();await page.getByLabel('Private note',{exact:true}).fill('Unsaved thought');await page.getByRole('button',{name:'Close sheet',exact:true}).click();
+ await page.getByRole('button',{name:/Your chat notes Before and after/}).click();
+ await expect(page.getByRole('heading',{name:'After your chat',exact:true})).toBeVisible();await expect(page.getByRole('heading',{name:'Before your chat',exact:true})).toBeVisible();
+ await expect(page.locator('.private-chat-note')).toContainText('An idea to try next time.');await expect(page.locator('.prep-library')).toContainText('Exploring product work');
+ await page.locator('.private-chat-note').click();await expect(page.getByLabel('Private note',{exact:true})).toHaveValue('An idea to try next time.');
 });
 
-test('meal reflection can be saved with choices only and no free-text note',async({page})=>{
- await demo(page);await scenario(page,'Meal invitation');await page.getByRole('button',{name:'Confirm',exact:true}).click();await page.getByRole('button',{name:'Reflection',exact:true}).click();
- await page.getByRole('button',{name:'Write feedback',exact:true}).click();await expect(page.getByRole('button',{name:'Save feedback',exact:true})).toBeDisabled();
- await page.getByRole('button',{name:'Great',exact:true}).click();await page.getByRole('button',{name:'Easy conversation',exact:true}).click();
- await page.getByRole('button',{name:'Yes',exact:true}).click();await page.getByRole('button',{name:'Save feedback',exact:true}).click();
- await expect(page.getByRole('dialog')).toHaveCount(0);await expect(page.getByText('Feedback saved',{exact:true})).toBeVisible();
+test('meal completion is independent of a private note and closing discards drafts',async({page})=>{
+ test.setTimeout(60_000);
+ await demo(page);await scenario(page,'Meal invitation');await page.getByRole('button',{name:'Completed',exact:true}).click();
+ await expect(page.getByLabel('Meal progress: Completed')).toBeVisible();
+ await page.getByRole('button',{name:'Record something',exact:true}).click();await expect(page.getByRole('button',{name:'Save entry',exact:true})).toBeDisabled();
+ await page.getByLabel('Private note',{exact:true}).fill('Remember the book recommendation.');await page.getByRole('button',{name:'Close sheet',exact:true}).click();
+ await page.getByRole('button',{name:'Record something',exact:true}).click();await expect(page.getByLabel('Private note',{exact:true})).toHaveValue('');
+ await page.getByLabel('Private note',{exact:true}).fill('Remember the book recommendation.');await page.getByRole('button',{name:'Save entry',exact:true}).click();
+ await expect(page.getByRole('dialog')).toHaveCount(0);await expect(page.locator('.meal-thread-messages')).not.toContainText('Remember the book recommendation.');
+ await page.getByRole('button',{name:'Your journal',exact:true}).click();await expect(page.getByLabel('Private note',{exact:true})).toHaveValue('Remember the book recommendation.');
+ await page.getByLabel('Private note',{exact:true}).fill('Unsaved edit');await page.getByRole('button',{name:'Close sheet',exact:true}).click();
+ await page.getByRole('button',{name:'Your journal',exact:true}).click();await expect(page.getByLabel('Private note',{exact:true})).toHaveValue('Remember the book recommendation.');
 });
 
 test('casual activities need shared approval before confirmation, then support photo memories',async({page})=>{
